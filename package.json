@@ -1,0 +1,23 @@
+{
+  "name": "datingapp_team",
+  "version": "1.0.0",
+  "description": "Dating app voor Blok Tech in teams.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Falicer/Datingapp_Team.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Falicer/Datingapp_Team/issues"
+  },
+  "homepage": "https://github.com/Falicer/Datingapp_Team#readme",
+  "devDependencies": {
+    "eslint": "^7.2.0"
+  }
+}
