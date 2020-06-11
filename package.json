@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/Falicer/Datingapp_Team/issues"
   },
-  "homepage": "https://github.com/Falicer/Datingapp_Team#readme"
+  "homepage": "https://github.com/Falicer/Datingapp_Team#readme",
+  "devDependencies": {
+    "eslint": "^7.2.0"
+  }
 }
