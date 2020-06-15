@@ -2,12 +2,12 @@ const express = require("express")
 const router = express.Router()
 const bcrypt = require("bcrypt")
 
-router.get("/", (req, res) => {
+router.get("/", checkNotAuthenticated, (req, res) => {
   res.status(200).send("You're on the register page")
 })
 
 // request(req) from body(body) name(name="input") >> req.body.input
-router.post("/", async (req, res) => {
+router.post("/", checkNotAuthenticated, async (req, res) => {
   // Encrypting password
   try{
     const passwordHash = await bcrypt.hash(req.body.new_Password, 12)
