@@ -8,6 +8,7 @@ const bcrypt = require('bcrypt')
 const passport = require("passport")
 const flash = require("express-flash")
 const session = require("express-session")
+const methodOverride = require("method-override")
 
 const initPassport = require('./passport-config')
 initPassport(
@@ -39,7 +40,8 @@ app.use(session({
   saveUninitialized: false
 }))
 app.use(passport.initialize())
-app,use(passport.session())
+app.use(passport.session())
+app.use(methodOverride("_method"))
 
 // Routes
 app.use("/", index)
@@ -59,6 +61,11 @@ app.listen(PORT, async () => {
   } catch (err) {
     console.log(err)
   }
+})
+
+app.delete("/logout", (req, res) => {
+  req.logOut()
+  res.redirect("/login")
 })
 
 function checkAuthenticated(req, res, next){

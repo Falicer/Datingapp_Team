@@ -4,3 +4,4 @@ express-flash
 express-session
 passport
 passport-local
+method-override
