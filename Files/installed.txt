@@ -1,0 +1,6 @@
+Installed NPM Packages from branch:
+bcrypt
+express-flash
+express-session
+passport
+passport-local
