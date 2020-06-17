@@ -5,19 +5,10 @@ const User = require("../models/User")
 const { createMatchObject, generateId } = require("../helpers")
 
 // Utils
-const { findUser } = require("./users")
+const { findUser, doesNotExistInUser } = require("./users")
 
-function isNewMatch(...ids) {
-  return new Promise((resolve, reject) => {
-    void async function () {
-      const exists = await User.exists({ _id: { $in: ids }, "matches.user._id": { $in: ids } })
-      // If match already exists, reject
-      if (exists) return reject(new Error("Already a match"))
-
-      resolve()
-    }()
-  })
-}
+const isNewMatch = (...ids) => doesNotExistInUser({ _id: { $in: ids }, "matches.user._id": { $in: ids } })
+const isNewLike = ([currentUserId, likedUserId]) => doesNotExistInUser({ _id: likedUserId, likesReceived: { $in: currentUserId } })
 
 function createMatch(userId1, userId2) {
   return new Promise((resolve, reject) => {
@@ -30,7 +21,6 @@ function createMatch(userId1, userId2) {
 
         const id = generateId()
 
-        // Store match objects on users
         user1.matches.push(createMatchObject(id, user2, chat._id))
         user2.matches.push(createMatchObject(id, user1, chat._id))
 
@@ -48,4 +38,4 @@ function createMatch(userId1, userId2) {
   })
 }
 
-module.exports = { createMatch, isNewMatch }
+module.exports = { createMatch, isNewMatch, isNewLike }
