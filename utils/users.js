@@ -2,19 +2,35 @@ const User = require("../models/User")
 
 function doesNotExistInUser(query) {
   return new Promise((resolve, reject) => {
-    void async function () {
-      const exists = await User.exists(query)
+    void (async function () {
+      try {
+        const exists = await User.exists(query)
 
-      if (exists) return reject(new Error("Already exists"))
+        return exists ? reject() : resolve()
+      } catch (error) {
+        reject(error)
+      }
+    })()
+  })
+}
 
-      resolve()
-    }()
+function doesExistInUser(query) {
+  return new Promise((resolve, reject) => {
+    void (async function () {
+      try {
+        const exists = await User.exists(query)
+
+        return exists ? resolve() : reject()
+      } catch (error) {
+        reject(error)
+      }
+    })()
   })
 }
 
 function findUser(id) {
   return new Promise((resolve, reject) => {
-    void async function () {
+    void (async function () {
       try {
         const user = await User.findById(id)
 
@@ -24,11 +40,12 @@ function findUser(id) {
       } catch (error) {
         reject(error)
       }
-    }()
+    })()
   })
 }
 
 module.exports = {
-  findUser, doesNotExistInUser
+  findUser,
+  doesNotExistInUser,
+  doesExistInUser,
 }
-
