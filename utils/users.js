@@ -1,12 +1,50 @@
 const User = require("../models/User")
 
-function doesNotExistInUser(query) {
+function doesNotExistInUser(query, errorMsg) {
   return new Promise((resolve, reject) => {
     void (async function () {
       try {
         const exists = await User.exists(query)
 
-        return exists ? reject() : resolve()
+        return exists ? reject(errorMsg) : resolve()
+      } catch (error) {
+        reject(error)
+      }
+    })()
+  })
+}
+
+function verifyUser(id) {
+  return new Promise((resolve, reject) => {
+    void (async function () {
+      try {
+        const result = await User.exists({ _id: id })
+        resolve({ id, result })
+      } catch (error) {
+        reject(error)
+      }
+    })()
+  })
+}
+
+function verifyUsers(ids) {
+  return new Promise((resolve, reject) => {
+    void (async function () {
+      const pendingUserVerifications = ids.map((id) => {
+        return verifyUser(id)
+      })
+
+      try {
+        const verifications = await Promise.all(pendingUserVerifications)
+        const failedVerifications = verifications.filter(
+          (verification) => !verification.result
+        )
+
+        const json = JSON.stringify(failedVerifications)
+
+        failedVerifications.length > 0
+          ? reject(`Failed verifications : ${json}`)
+          : resolve()
       } catch (error) {
         reject(error)
       }
@@ -48,4 +86,5 @@ module.exports = {
   findUser,
   doesNotExistInUser,
   doesExistInUser,
+  verifyUsers,
 }
