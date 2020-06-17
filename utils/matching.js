@@ -13,6 +13,13 @@ const isNewLike = ([currentUserId, likedUserId]) => doesNotExistInUser({ _id: li
 function createMatch(userId1, userId2) {
   return new Promise((resolve, reject) => {
     void async function () {
+      // Check if users aren't matched
+      try {
+        await isNewMatch(userId1, userId2)
+      } catch (error) {
+        return reject(error)
+      }
+
       try {
         const user1 = await findUser(userId1)
         const user2 = await findUser(userId2)
