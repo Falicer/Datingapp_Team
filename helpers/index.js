@@ -6,9 +6,11 @@ exports.createMatchObject = (id, user, chatId) => {
   return {
     _id: id,
     user: {
-      _id, name, small_img_url
+      _id,
+      name,
+      small_img_url,
     },
-    chatId
+    chatId,
   }
 }
 
