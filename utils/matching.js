@@ -7,17 +7,48 @@ const { createMatchObject, generateId } = require("../helpers")
 // Utils
 const { findUser, doesNotExistInUser } = require("./users")
 
-const isNewMatch = (...ids) => doesNotExistInUser({ _id: { $in: ids }, "matches.user._id": { $in: ids } })
-const isNewLike = ([currentUserId, likedUserId]) => doesNotExistInUser({ _id: likedUserId, likesReceived: { $in: currentUserId } })
+function likedEachOther(...ids) {
+  return new Promise((resolve, reject) => {
+    void (async function () {
+      try {
+        const result = await User.find({
+          _id: { $in: ids },
+          likesReceived: { $in: ids },
+        })
+
+        resolve(result.length == 2)
+      } catch (error) {
+        reject(error)
+      }
+    })()
+  })
+}
+
+function checkIfMatch(userId1, userId2) {
+  return new Promise((resolve, reject) => {
+    void (async function () {
+      try {
+        // const haveLikedEachOther = await
+        resolve(await likedEachOther(userId1, userId2))
+        // return haveLikedEachOther ? resolve(true) : resolve(false)
+      } catch (error) {
+        reject(error)
+      }
+    })()
+  })
+}
+
+const areNotMatched = (...ids) =>
+  doesNotExistInUser({ _id: { $in: ids }, "matches.user._id": { $in: ids } })
 
 function createMatch(userId1, userId2) {
   return new Promise((resolve, reject) => {
-    void async function () {
+    void (async function () {
       // Check if users aren't matched
       try {
-        await isNewMatch(userId1, userId2)
+        await areNotMatched(userId1, userId2)
       } catch (error) {
-        return reject(error)
+        return reject(new Error("Already matched"))
       }
 
       try {
@@ -41,8 +72,8 @@ function createMatch(userId1, userId2) {
       } catch (error) {
         reject(error)
       }
-    }()
+    })()
   })
 }
 
-module.exports = { createMatch, isNewMatch, isNewLike }
+module.exports = { createMatch, checkIfMatch }
