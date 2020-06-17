@@ -20,6 +20,7 @@ const UserSchema = new Schema({
     type: Number,
     required: true,
   },
+  likesReceived: [Schema.ObjectId], // Collect likes received (store other user ids)
   matches: [MatchSchema],
 })
 
