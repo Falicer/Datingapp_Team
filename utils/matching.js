@@ -1,10 +1,23 @@
 const Chat = require("../models/Chat")
+const User = require("../models/User")
 
 // Helpers
 const { createMatchObject, generateId } = require("../helpers")
 
 // Utils
 const { findUser } = require("./users")
+
+function isNewMatch(...ids) {
+  return new Promise((resolve, reject) => {
+    void async function () {
+      const exists = await User.exists({ _id: { $in: ids }, "matches.user._id": { $in: ids } })
+      // If match already exists, reject
+      if (exists) return reject(new Error("Already a match"))
+
+      resolve()
+    }()
+  })
+}
 
 function createMatch(userId1, userId2) {
   return new Promise((resolve, reject) => {
@@ -26,7 +39,7 @@ function createMatch(userId1, userId2) {
 
           resolve()
         } catch (error) {
-          reject("Something wen't wrong while saving", error)
+          reject(error)
         }
       } catch (error) {
         reject(error)
@@ -35,4 +48,4 @@ function createMatch(userId1, userId2) {
   })
 }
 
-module.exports = { createMatch }
+module.exports = { createMatch, isNewMatch }
