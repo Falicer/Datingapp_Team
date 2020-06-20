@@ -3,6 +3,7 @@ const User = require("../models/User")
 
 // Helpers
 const { createMatchObject, generateId } = require("../helpers")
+const { getMatchingGender } = require("../helpers/matching")
 
 // Utils
 const { getUserById, doesNotExistInUser } = require("./users")
@@ -76,4 +77,23 @@ function createMatch(userId1, userId2) {
   })
 }
 
-module.exports = { createMatch, checkIfMatch }
+function getPotentialMatches(user) {
+  return new Promise((resolve, reject) => {
+    void (async function () {
+      try {
+        const users = await User.find({
+          _id: { $ne: user._id },
+          likesReceived: { $nin: [user._id] },
+          gender: getMatchingGender(user.sexuality, user.gender),
+          sexuality: user.sexuality,
+        })
+
+        resolve(users)
+      } catch (error) {
+        reject(error)
+      }
+    })()
+  })
+}
+
+module.exports = { createMatch, checkIfMatch, getPotentialMatches }
