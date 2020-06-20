@@ -21,6 +21,13 @@ const PORT = 2000
 // Express Init
 const app = express()
 
+// Set development mode in rendering (auto-fill forms)
+app.locals.development = {
+  enabled: true,
+  email: "jesse@live.nl",
+  password: 123,
+}
+
 // EJS & EJS Layouts
 app.set("view engine", "ejs")
 app.use(expressEjsLayouts)
