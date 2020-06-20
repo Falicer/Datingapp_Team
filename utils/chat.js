@@ -1,4 +1,5 @@
 const Chat = require("../models/Chat")
+const User = require("../models/User")
 
 const { doesExistInUser } = require("../utils/users")
 

@@ -110,4 +110,32 @@ function getMatches(id) {
   })
 }
 
-module.exports = { createMatch, checkIfMatch, getPotentialMatches, getMatches }
+function getMatchFromChatId(chatId, _id) {
+  return new Promise((resolve, reject) => {
+    void (async function () {
+      try {
+        const { matchId } = await Chat.findById(chatId)
+        const _matches = await User.find(
+          { _id, "matches._id": matchId },
+          "matches"
+        )
+
+        if (!_matches || _matches.length == 0) return resolve(null)
+
+        const { matches } = _matches[0]
+
+        resolve(matches.find((match) => match._id.equals(matchId)))
+      } catch (error) {
+        reject(error)
+      }
+    })()
+  })
+}
+
+module.exports = {
+  createMatch,
+  checkIfMatch,
+  getPotentialMatches,
+  getMatches,
+  getMatchFromChatId,
+}
