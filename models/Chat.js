@@ -6,7 +6,15 @@ const MessageSchema = new Schema({
 })
 
 const ChatSchema = new Schema({
+  matchId: {
+    type: Schema.ObjectId,
+    required: true,
+  },
   messages: [MessageSchema],
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 })
 
 const Model = model("chat", ChatSchema)
