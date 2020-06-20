@@ -25,7 +25,7 @@ const app = express()
 if (process.argv.includes("--development")) {
   app.locals.development = {
     enabled: true,
-    email: "jesse@live.nl",
+    email: "anna@live.nl",
     password: 123,
   }
 }
@@ -63,6 +63,7 @@ app.use("/login", require("./routes/login"))
 app.use("/register", require("./routes/register"))
 app.use("/user", require("./routes/user"))
 app.use("/matches", require("./routes/matches"))
+app.use("/chat", require("./routes/chat"))
 
 app.delete("/logout", (req, res) => {
   req.logOut()
