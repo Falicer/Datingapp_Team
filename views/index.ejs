@@ -33,6 +33,9 @@
 
 <% otherUsers.forEach((user) => { %>
   <%= user.name %>
+  <form action="/user/<%= user._id %>/like" method="POST">
+    <button type="submit">Like</button>
+  </form>
 <% }) %>
 
 <form action="/logout?_method=DELETE" method="POST">
