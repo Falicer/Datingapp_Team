@@ -5,6 +5,7 @@ const flash = require("express-flash")
 const session = require("express-session")
 const methodOverride = require("method-override")
 const bodyParser = require("body-parser")
+const expressEjsLayouts = require("express-ejs-layouts")
 
 mongoose.set("useFindAndModify", false)
 
@@ -20,8 +21,9 @@ const PORT = 2000
 // Express Init
 const app = express()
 
-// EJS
+// EJS & EJS Layouts
 app.set("view engine", "ejs")
+app.use(expressEjsLayouts)
 
 // Flash
 app.use(flash())
@@ -51,6 +53,7 @@ app.use("/", require("./routes/index"))
 app.use("/login", require("./routes/login"))
 app.use("/register", require("./routes/register"))
 app.use("/user", require("./routes/user"))
+app.use("/matches", require("./routes/matches"))
 
 app.delete("/logout", (req, res) => {
   req.logOut()

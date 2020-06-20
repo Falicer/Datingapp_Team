@@ -18,7 +18,7 @@ router.get("/:id", checkAuthenticated, (req, res) => {
 // 4. Check if match
 
 router.post("/:id/like", checkAuthenticated, async (req, res) => {
-  const userIds = ["5ee9156cb470389a1cedfbe4", req.params.id]
+  const userIds = [req.user._id, req.params.id]
 
   try {
     await Promise.all([verifyUsers(userIds), likeUser(...userIds)])
@@ -26,10 +26,10 @@ router.post("/:id/like", checkAuthenticated, async (req, res) => {
     if (await checkIfMatch(...userIds)) {
       await createMatch(...userIds)
 
-      return res.status(201).send(`New Match: ${req.params.id})\n`)
+      return res.status(201).redirect("/matches")
     }
 
-    res.status(200).send(`Liked User: ${req.params.id})\n`)
+    res.status(200).redirect("/")
   } catch (error) {
     res.status(400).send(`${error}\n\n`)
   }
