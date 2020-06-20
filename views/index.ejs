@@ -29,8 +29,12 @@
 
     <button type="submit">Done</button>
   </form>
-<% } %>
+<% } else { %>
+
+<h1>Hello <%= user.name %></h1>
 
 <form action="/logout?_method=DELETE" method="POST">
   <button type="submit">Logout</button>
 </form>
+
+<% } %>

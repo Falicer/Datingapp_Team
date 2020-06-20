@@ -1,5 +1,24 @@
 const User = require("../models/User")
 
+const { definedOnSchema } = require("../helpers")
+
+function updateUser(id, data) {
+  return new Promise((resolve, reject) => {
+    if (typeof data != "object") return reject("Need to pass in data object")
+
+    void (async function () {
+      try {
+        await definedOnSchema(User, data)
+        await User.findByIdAndUpdate(id, data)
+
+        resolve()
+      } catch (error) {
+        reject(error)
+      }
+    })()
+  })
+}
+
 function createUser(data) {
   return new Promise((resolve, reject) => {
     void (async function () {
@@ -124,4 +143,5 @@ module.exports = {
   doesNotExistInUser,
   doesExistInUser,
   verifyUsers,
+  updateUser,
 }
