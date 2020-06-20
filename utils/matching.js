@@ -25,12 +25,12 @@ function likedEachOther(...ids) {
   })
 }
 
-function checkIfMatch(userId1, userId2) {
+function checkIfMatch(...ids) {
   return new Promise((resolve, reject) => {
     void (async function () {
       try {
         // const haveLikedEachOther = await
-        resolve(await likedEachOther(userId1, userId2))
+        resolve(await likedEachOther(...ids))
         // return haveLikedEachOther ? resolve(true) : resolve(false)
       } catch (error) {
         reject(error)
@@ -56,9 +56,9 @@ function createMatch(userId1, userId2) {
         const user1 = await getUserById(userId1)
         const user2 = await getUserById(userId2)
 
-        const chat = new Chat()
-
         const id = generateId()
+
+        const chat = new Chat({ matchId: id })
 
         user1.matches.push(createMatchObject(id, user2, chat._id))
         user2.matches.push(createMatchObject(id, user1, chat._id))
