@@ -5,11 +5,6 @@ mongoose.set("useFindAndModify", false)
 
 require("dotenv").config()
 
-// Routes
-const index = require("./routes/index")
-const login = require("./routes/login")
-const register = require("./routes/register")
-
 // Constants
 const PORT = 2000
 
@@ -17,9 +12,10 @@ const PORT = 2000
 const app = express()
 
 // Routes
-app.use("/", index)
-app.use("/login", login)
-app.use("/register", register)
+app.use("/", require("./routes/index"))
+app.use("/login", require("./routes/login"))
+app.use("/register", require("./routes/register"))
+app.use("/user", require("./routes/user"))
 
 app.listen(PORT, async () => {
   console.log(`Server on port: ${PORT}`)
