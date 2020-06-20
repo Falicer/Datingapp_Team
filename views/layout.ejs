@@ -26,6 +26,11 @@
         form.querySelector("input[name='email']").value = "<%= development.email %>"
         form.querySelector("input[name='password']").value = "<%= development.password %>"
         form.submit()
+
+      } else {
+        if (window.location.pathname != "<%= development.route %>" && "<%= development.route %>" != "") {
+          window.location = "<%= development.route %>"
+        }   
       }
     </script>
     <% } %>
