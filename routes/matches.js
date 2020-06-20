@@ -3,18 +3,14 @@ const router = express.Router()
 
 const { checkAuthenticated } = require("../middleware/authentication")
 
-const { getPotentialMatches } = require("../utils/matching")
+const { getMatches } = require("../utils/matching")
 
 router.get("/", checkAuthenticated, async (req, res) => {
-  const currentUser = req.user
-  const isNew = req.user.age == undefined
-
   try {
-    const otherUsers = await getPotentialMatches(req.user)
+    const matches = await getMatches(req.user._id)
 
-    res.status(200).render("index", { isNew, currentUser, otherUsers })
+    res.status(200).render("matches", { matches })
   } catch (error) {
-    console.log(error)
     res.status(500).send("Internal Server Error")
   }
 })

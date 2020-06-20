@@ -3,10 +3,13 @@ const User = require("../models/User")
 const { doesNotExistInUser } = require("../utils/users")
 
 const alreadyLiked = (currentUserId, likedUserId) =>
-  doesNotExistInUser({
-    _id: likedUserId,
-    likesReceived: { $in: currentUserId },
-  })
+  doesNotExistInUser(
+    {
+      _id: likedUserId,
+      likesReceived: { $in: currentUserId },
+    },
+    "Already liked this user"
+  )
 
 function likeUser(currentUserId, likedUserId) {
   return new Promise((resolve, reject) => {
@@ -14,7 +17,7 @@ function likeUser(currentUserId, likedUserId) {
       try {
         await alreadyLiked(currentUserId, likedUserId)
       } catch (error) {
-        return reject("Already liked")
+        return reject(error)
       }
 
       try {

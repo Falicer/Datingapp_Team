@@ -3,9 +3,10 @@ const User = require("../models/User")
 
 // Helpers
 const { createMatchObject, generateId } = require("../helpers")
+const { getMatchingGender } = require("../helpers/matching")
 
 // Utils
-const { findUser, doesNotExistInUser } = require("./users")
+const { getUserById, doesNotExistInUser } = require("./users")
 
 function likedEachOther(...ids) {
   return new Promise((resolve, reject) => {
@@ -52,8 +53,8 @@ function createMatch(userId1, userId2) {
       }
 
       try {
-        const user1 = await findUser(userId1)
-        const user2 = await findUser(userId2)
+        const user1 = await getUserById(userId1)
+        const user2 = await getUserById(userId2)
 
         const chat = new Chat()
 
@@ -76,4 +77,37 @@ function createMatch(userId1, userId2) {
   })
 }
 
-module.exports = { createMatch, checkIfMatch }
+function getPotentialMatches(user) {
+  return new Promise((resolve, reject) => {
+    void (async function () {
+      try {
+        const users = await User.find({
+          _id: { $ne: user._id },
+          likesReceived: { $nin: [user._id] },
+          gender: getMatchingGender(user.sexuality, user.gender),
+          sexuality: user.sexuality,
+        })
+
+        resolve(users)
+      } catch (error) {
+        reject(error)
+      }
+    })()
+  })
+}
+
+function getMatches(id) {
+  return new Promise((resolve, reject) => {
+    void (async function () {
+      try {
+        const { matches } = await User.findById(id, "matches")
+
+        resolve(matches)
+      } catch (error) {
+        reject(error)
+      }
+    })()
+  })
+}
+
+module.exports = { createMatch, checkIfMatch, getPotentialMatches, getMatches }
