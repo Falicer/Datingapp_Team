@@ -5,7 +5,7 @@ const User = require("../models/User")
 const { createMatchObject, generateId } = require("../helpers")
 
 // Utils
-const { findUser, doesNotExistInUser } = require("./users")
+const { getUserById, doesNotExistInUser } = require("./users")
 
 function likedEachOther(...ids) {
   return new Promise((resolve, reject) => {
@@ -52,8 +52,8 @@ function createMatch(userId1, userId2) {
       }
 
       try {
-        const user1 = await findUser(userId1)
-        const user2 = await findUser(userId2)
+        const user1 = await getUserById(userId1)
+        const user2 = await getUserById(userId2)
 
         const chat = new Chat()
 

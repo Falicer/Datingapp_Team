@@ -4,7 +4,7 @@ const MatchSchema = new Schema({
   user: {
     _id: Schema.ObjectId,
     name: String,
-    small_img_url: String
+    small_img_url: String,
   },
   chatId: {
     type: Schema.Types.Mixed,
@@ -14,12 +14,19 @@ const MatchSchema = new Schema({
 const UserSchema = new Schema({
   name: {
     type: String,
-    required: true
-  },
-  age: {
-    type: Number,
     required: true,
   },
+  email: {
+    type: String,
+    require: true,
+  },
+  password: {
+    type: String,
+    require: true,
+  },
+  age: Number,
+  gender: String,
+  sexuality: String,
   likesReceived: [Schema.ObjectId], // Collect likes received (store other user ids)
   matches: [MatchSchema],
 })

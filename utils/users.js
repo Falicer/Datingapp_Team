@@ -1,5 +1,56 @@
 const User = require("../models/User")
 
+function createUser(data) {
+  return new Promise((resolve, reject) => {
+    void (async function () {
+      const { name, email, password } = data
+
+      const user = new User({
+        name,
+        email,
+        password,
+      })
+
+      try {
+        await user.save()
+        resolve()
+      } catch (error) {
+        reject(error)
+      }
+    })()
+  })
+}
+
+function getUserByEmail(email) {
+  return new Promise((resolve, reject) => {
+    void (async function () {
+      try {
+        const user = await User.findOne({ email: email })
+
+        resolve(user)
+      } catch (error) {
+        reject(error)
+      }
+    })()
+  })
+}
+
+function getUserById(id) {
+  return new Promise((resolve, reject) => {
+    void (async function () {
+      try {
+        const user = await User.findById(id)
+
+        if (!user) reject(new Error(`User id ${id}, does not exist`))
+
+        resolve(user)
+      } catch (error) {
+        reject(error)
+      }
+    })()
+  })
+}
+
 function doesNotExistInUser(query, errorMsg) {
   return new Promise((resolve, reject) => {
     void (async function () {
@@ -66,24 +117,10 @@ function doesExistInUser(query) {
   })
 }
 
-function findUser(id) {
-  return new Promise((resolve, reject) => {
-    void (async function () {
-      try {
-        const user = await User.findById(id)
-
-        if (!user) reject(new Error(`User id ${id} does not exist`))
-
-        resolve(user)
-      } catch (error) {
-        reject(error)
-      }
-    })()
-  })
-}
-
 module.exports = {
-  findUser,
+  createUser,
+  getUserByEmail,
+  getUserById,
   doesNotExistInUser,
   doesExistInUser,
   verifyUsers,
