@@ -96,4 +96,18 @@ function getPotentialMatches(user) {
   })
 }
 
-module.exports = { createMatch, checkIfMatch, getPotentialMatches }
+function getMatches(id) {
+  return new Promise((resolve, reject) => {
+    void (async function () {
+      try {
+        const { matches } = await User.findById(id, "matches")
+
+        resolve(matches)
+      } catch (error) {
+        reject(error)
+      }
+    })()
+  })
+}
+
+module.exports = { createMatch, checkIfMatch, getPotentialMatches, getMatches }
