@@ -128,7 +128,7 @@ function doesExistInUser(query) {
       try {
         const exists = await User.exists(query)
 
-        return exists ? resolve() : reject()
+        resolve(exists)
       } catch (error) {
         reject(error)
       }
