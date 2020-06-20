@@ -8,7 +8,7 @@ const {
 } = require("../middleware/authentication")
 
 router.get("/:chatId", checkAuthenticated, allowInChat, async (req, res) =>
-  res.status(200).render("register")
+  res.status(200).render("chat")
 )
 
 module.exports = router
