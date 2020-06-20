@@ -53,6 +53,7 @@ app.use("/", require("./routes/index"))
 app.use("/login", require("./routes/login"))
 app.use("/register", require("./routes/register"))
 app.use("/user", require("./routes/user"))
+app.use("/matches", require("./routes/matches"))
 
 app.delete("/logout", (req, res) => {
   req.logOut()
