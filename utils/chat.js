@@ -22,13 +22,13 @@ function isAllowedInChat(userId, chatId) {
   })
 }
 
-function addMessage(chatId, { type, message }) {
+function addMessage(chatId, { type, content }) {
   return new Promise((resolve, reject) => {
     void (async function () {
       try {
         const chat = await Chat.findById(chatId)
 
-        chat.messages.push({ type, message })
+        chat.messages.push({ type, content })
 
         await chat.save()
 

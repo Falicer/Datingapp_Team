@@ -3,7 +3,11 @@
 <ul>
   <% chat.messages.forEach((message) => { %>
     <li>
-      <p><%= message.message %></p>
+      <% if (message.type == "giphy") { %>
+        <img src="<%= message.content %>">
+      <% } else if (message.type == "text") { %>
+        <p><%= message.content %></p>
+      <% } %>
       <footer>
         <small><%= message.date %></small>
       </footer>

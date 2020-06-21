@@ -2,7 +2,7 @@ const { model, Schema } = require("mongoose")
 
 const MessageSchema = new Schema({
   type: String,
-  message: String, // Either a link to a gipihy or text message
+  content: String, // Either a link to a gipihy or text message
   date: {
     type: Date,
     default: Date.now,

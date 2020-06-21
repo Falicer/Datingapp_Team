@@ -9,8 +9,10 @@ const {
   allowInChat,
 } = require("../middleware/authentication")
 
+// Utils
 const { getMatchFromChatId } = require("../utils/matching")
 const { addMessage } = require("../utils/chat")
+const { getTrending, searchGiphy } = require("../utils/giphy")
 
 router.get("/:chatId", checkAuthenticated, allowInChat, async (req, res) => {
   const { _id } = req.user
@@ -30,9 +32,40 @@ router.get("/:chatId", checkAuthenticated, allowInChat, async (req, res) => {
   }
 })
 
-router.get("/:chatId/giphy", checkAuthenticated, allowInChat, (req, res) => {
-  res.render("giphy")
-})
+router.get(
+  "/:chatId/giphy",
+  checkAuthenticated,
+  allowInChat,
+  async (req, res) => {
+    const { chatId } = req.params
+    const { search = undefined } = req.query
+
+    // If no search query => show trending giphies
+    try {
+      if (!search) {
+        const { data } = await getTrending()
+
+        const giphies = data.map((giphy) => {
+          return {
+            alt: giphy.title,
+            src: giphy.images.original.url,
+            id: giphy.id,
+          }
+        })
+
+        res.status(200).render("giphy", { giphies, chatId })
+
+        console.log(giphies)
+        // res
+        //   .status(200)
+        //   .render("giphy-overview", { layout: "layout-no-nav", ...renderData })
+      }
+    } catch (error) {
+      console.log(error)
+      res.status(500).send("Internal Server Error")
+    }
+  }
+)
 
 router.post(
   "/:chatId/message",
@@ -42,14 +75,15 @@ router.post(
     const { chatId } = req.params
     const { type, content } = req.body
 
+    console.log(type, content)
+
     try {
-      await addMessage(chatId, { type, message: content })
+      await addMessage(chatId, { type, content })
 
       res.status(200).redirect(`/chat/${chatId}`)
     } catch (error) {
       console.log(error)
     }
-    // console.log(type, content)
   }
 )
 
