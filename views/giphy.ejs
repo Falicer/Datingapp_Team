@@ -1,5 +1,10 @@
 <h1>Giphy page</h1>
 
+<form action="/chat/<%= chatId %>/giphy/search" method="POST">
+  <input type="text" name="query">
+  <button type="submit">Search</button>
+</form>
+
 <form action="/chat/<%= chatId %>/message" method="POST">
   <input type="hidden" name="type" value="giphy">
 

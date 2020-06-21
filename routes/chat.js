@@ -43,22 +43,13 @@ router.get(
     // If no search query => show trending giphies
     try {
       if (!search) {
-        const { data } = await getTrending()
-
-        const giphies = data.map((giphy) => {
-          return {
-            alt: giphy.title,
-            src: giphy.images.original.url,
-            id: giphy.id,
-          }
-        })
+        const giphies = await getTrending()
 
         res.status(200).render("giphy", { giphies, chatId })
+      } else {
+        const giphies = await searchGiphy(search)
 
-        console.log(giphies)
-        // res
-        //   .status(200)
-        //   .render("giphy-overview", { layout: "layout-no-nav", ...renderData })
+        res.status(200).render("giphy", { giphies, chatId })
       }
     } catch (error) {
       console.log(error)
@@ -66,6 +57,12 @@ router.get(
     }
   }
 )
+
+router.post("/:chatId/giphy/search", (req, res) => {
+  const { query } = req.body
+
+  res.redirect(`/chat/${req.params.chatId}/giphy?search=${query}`)
+})
 
 router.post(
   "/:chatId/message",
