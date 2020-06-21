@@ -8,9 +8,52 @@ const { createMatch, checkIfMatch } = require("../utils/matching")
 // Middleware
 const { checkAuthenticated } = require("../middleware/authentication")
 
-router.get("/:id", checkAuthenticated, (req, res) => {
-  res.status(200).send("You're on the user page")
+const { getUserById } = require("../utils/users")
+
+const userIdInSession = (req, res, next) =>
+  req.user._id == req.params.id ? next() : res.status(401).send("Unauthorized")
+
+router.get("/", checkAuthenticated, (req, res) => {
+  res.redirect(`/user/${req.user._id}`)
 })
+
+// Account page
+router.get("/:id", checkAuthenticated, userIdInSession, async (req, res) => {
+  const { id } = req.params
+  try {
+    const user = await getUserById(id)
+
+    res.status(200).render("account", { user })
+  } catch (error) {
+    console.log(error)
+    res.status(500).send("Internal Server Error")
+  }
+})
+
+router.put(
+  "/:id/update",
+  checkAuthenticated,
+  userIdInSession,
+  async (req, res) => {
+    const { id } = req.params
+    const data = req.body
+    const changedData = Object.fromEntries(
+      Object.entries(data).filter(([key, value]) => req.user[key] != value)
+    )
+
+    if (!Object.keys(changedData).length) {
+      return res.redirect(`/user/${id}`)
+    }
+
+    try {
+      await updateUser(id, changedData)
+
+      res.status(200).redirect(`/user/${id}`)
+    } catch (error) {
+      res.status(400).send(error.message)
+    }
+  }
+)
 
 // 1. Authentication (middleware)
 // 2. Do database checks (check for potential duplicates)

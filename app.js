@@ -21,6 +21,16 @@ const PORT = 2000
 // Express Init
 const app = express()
 
+app.locals.development = {}
+// Development mode
+if (process.argv.includes("--development")) {
+  app.locals.development = {
+    enabled: true,
+    email: "anna@live.nl",
+    password: 123,
+  }
+}
+
 // EJS & EJS Layouts
 app.set("view engine", "ejs")
 app.use(expressEjsLayouts)
@@ -48,12 +58,23 @@ app.use(passport.session())
 // Other
 app.use(methodOverride("_method"))
 
-// Routes
-app.use("/", require("./routes/index"))
 app.use("/login", require("./routes/login"))
 app.use("/register", require("./routes/register"))
+
+app.use((req, res, next) => {
+  if (!req.user) return next()
+
+  res.locals.user = req.user
+  res.locals.isNew = req.user.age == undefined
+
+  next()
+})
+
+// Routes
+app.use("/", require("./routes/index"))
 app.use("/user", require("./routes/user"))
 app.use("/matches", require("./routes/matches"))
+app.use("/chat", require("./routes/chat"))
 
 app.delete("/logout", (req, res) => {
   req.logOut()
