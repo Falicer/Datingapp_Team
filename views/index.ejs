@@ -1,5 +1,5 @@
 <% if (isNew) { %>
-  <form action="/user/<%= currentUser._id %>/profile/setup?_method=PUT" method="POST">
+  <form action="/user/<%= user._id %>/profile/setup?_method=PUT" method="POST">
     <% if (messages.error) { %> 
       <%= locals.messages.error %> 
     <% } %>
@@ -31,9 +31,9 @@
   </form>
 <% } else { %>
 
-<% otherUsers.forEach((user) => { %>
-  <%= user.name %>
-  <form action="/user/<%= user._id %>/like" method="POST">
+<% otherUsers.forEach((otherUser) => { %>
+  <%= otherUser.name %>
+  <form action="/user/<%= otherUser._id %>/like" method="POST">
     <button type="submit">Like</button>
   </form>
 <% }) %>
