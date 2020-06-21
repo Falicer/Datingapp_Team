@@ -1,0 +1,24 @@
+<h1>Chat</h1>
+
+<ul>
+  <% chat.messages.forEach((message) => { %>
+    <li>
+      <% if (message.type == "giphy") { %>
+        <img src="<%= message.content %>">
+      <% } else if (message.type == "text") { %>
+        <p><%= message.content %></p>
+      <% } %>
+      <footer>
+        <small><%= message.date %></small>
+      </footer>
+    </li>
+  <% }) %>
+</ul>
+
+<a class="chat-footer__giphy-overview-link" href="/chat/<%= chat._id %>/giphy">GIPHY</a>
+
+<form action="/chat/<%= chat._id %>/message" method="POST">
+  <input type="hidden" name="type" value="text"> <!-- Could be type GIPHY-->
+  <input type="text" name="content">
+  <button type="submit">Send</button>
+</form>
