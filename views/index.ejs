@@ -1,6 +1,6 @@
 <% otherUsers.forEach((otherUser) => { %>
   <%= otherUser.name %>
-  <form action="/user/<%= otherUser._id %>/like" method="POST">
+  <form action="/user/<%= user._id %>/like?userId=<%= otherUser._id %>" method="POST">
     <button type="submit">Like</button>
   </form>
 <% }) %>

@@ -1,6 +1,7 @@
 const express = require("express")
 const router = express.Router()
 const { hash } = require("bcrypt")
+
 // Utils / Helpers
 const { createAndStoreUser } = require("../utils/users")
 
@@ -25,6 +26,7 @@ router.post("/", validateInputs, async (req, res) => {
       password: hashedPassword,
     })
 
+    // Loggin after register
     req.login(user, (err) =>
       err ? res.status(200).redirect("/login") : res.redirect("/")
     )

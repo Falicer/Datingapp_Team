@@ -1,8 +1,10 @@
 const express = require("express")
 const router = express.Router()
 
+// Utils
 const { getPotentialMatches } = require("../utils/matching")
 
+// Routes (GET) : /
 router.get("/", async (req, res) => {
   try {
     const otherUsers = await getPotentialMatches(req.user)

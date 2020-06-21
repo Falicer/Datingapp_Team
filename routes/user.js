@@ -1,27 +1,31 @@
 const express = require("express")
 const router = express.Router()
 
-const { verifyUsers, updateUser, deleteUser } = require("../utils/users")
-const { likeUser } = require("../utils/userActions")
-const { createMatch, checkIfMatch } = require("../utils/matching")
+// Utils
+const {
+  getUserById,
+  verifyUsers,
+  updateUser,
+  deleteUser,
+  likeUser,
+  createMatch,
+  checkIfMatch,
+} = require("../utils")
 
 // Middleware
-const { checkAuthenticated } = require("../middleware/authentication")
-
-const { getUserById } = require("../utils/users")
-
-const userIdInSession = (req, res, next) =>
+const userIdInSession = (req, res, next) => {
   req.user._id == req.params.id ? next() : res.status(401).send("Unauthorized")
+}
 
-router.get("/", checkAuthenticated, (req, res) => {
+// Route (GET) : /user
+router.get("/", (req, res) => {
   res.redirect(`/user/${req.user._id}`)
 })
 
-// Account page
-router.get("/:id", checkAuthenticated, userIdInSession, async (req, res) => {
-  const { id } = req.params
+// Route (GET) : /user/:id
+router.get("/:id", userIdInSession, async (req, res) => {
   try {
-    const user = await getUserById(id)
+    const user = await getUserById(req.params.id)
 
     res.status(200).render("account", { user })
   } catch (error) {
@@ -30,38 +34,27 @@ router.get("/:id", checkAuthenticated, userIdInSession, async (req, res) => {
   }
 })
 
-router.put(
-  "/:id/update",
-  checkAuthenticated,
-  userIdInSession,
-  async (req, res) => {
-    const { id } = req.params
-    const data = req.body
-    const changedData = Object.fromEntries(
-      Object.entries(data).filter(([key, value]) => req.user[key] != value)
-    )
+// Route (PUT) : /user/:id/update
+router.put("/:id/update", userIdInSession, async (req, res) => {
+  const id = req.params.id
+  const data = req.body
 
-    if (!Object.keys(changedData).length) {
-      return res.redirect(`/user/${id}`)
-    }
+  const changedData = Object.entries(data).filter(([k, v]) => req.user[k] != v)
 
-    try {
-      await updateUser(id, changedData)
+  if (!changedData.length) return res.redirect(`/user/${id}`)
 
-      res.status(200).redirect(`/user/${id}`)
-    } catch (error) {
-      res.status(400).send(error.message)
-    }
+  try {
+    await updateUser(id, Object.fromEntries(changedData))
+
+    res.status(200).redirect(`/user/${id}`)
+  } catch (error) {
+    res.status(400).send(error.message)
   }
-)
+})
 
-// 1. Authentication (middleware)
-// 2. Do database checks (check for potential duplicates)
-// 3. Like the user (update database)
-// 4. Check if match
-
-router.post("/:id/like", checkAuthenticated, async (req, res) => {
-  const userIds = [req.user._id, req.params.id]
+// Route (POST) : /user/:id/liked?userId=:otherUserId
+router.post("/:id/like", userIdInSession, async (req, res) => {
+  const userIds = [req.params.id, req.query.userId]
 
   try {
     await Promise.all([verifyUsers(userIds), likeUser(...userIds)])
@@ -74,11 +67,12 @@ router.post("/:id/like", checkAuthenticated, async (req, res) => {
 
     res.status(200).redirect("/")
   } catch (error) {
-    res.status(400).send(`${error}\n\n`)
+    res.status(400).send(`${error}\n`)
   }
 })
 
-router.put("/:id/profile/setup", checkAuthenticated, async (req, res) => {
+// Route (GET) : /user/:id/profile/setup
+router.put("/:id/profile/setup", userIdInSession, async (req, res) => {
   const id = req.params.id
   const { age, sexuality, gender } = req.body
 
@@ -101,22 +95,18 @@ router.put("/:id/profile/setup", checkAuthenticated, async (req, res) => {
   }
 })
 
-router.delete(
-  "/:id/delete",
-  checkAuthenticated,
-  userIdInSession,
-  async (req, res) => {
-    const { id } = req.params
-    try {
-      await deleteUser(id)
+// Route (DELETE) : /user/:id/delete
+router.delete("/:id/delete", userIdInSession, async (req, res) => {
+  const { id } = req.params
+  try {
+    await deleteUser(id)
 
-      req.logOut()
-      res.status(200).redirect("/login")
-    } catch (error) {
-      console.log(error)
-      res.status(500).send("Internal Server Error")
-    }
+    req.logOut()
+    res.status(200).redirect("/login")
+  } catch (error) {
+    console.log(error)
+    res.status(500).send("Internal Server Error")
   }
-)
+})
 
 module.exports = router
