@@ -96,5 +96,10 @@ When you created an account you can like other people, they will need to like yo
 ```
 ---
 
+## Dependencies ⚙️
+You can find our dependencies on our wiki page: [Dependencies](https://github.com/Falicer/Datingapp_Team/wiki/NPM-Packages)
+
+---
+
 ## License
 MIT © [Jesse Dijkman](https://github.com/jesseDijkman1) & [Raekwon Gerold](https://github.com/Falicer)
