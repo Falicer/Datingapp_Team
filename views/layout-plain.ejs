@@ -10,15 +10,6 @@
     <div class="page-container">
       <%- body %>
     </div>
-    <footer>
-      <nav>
-        <ul>
-          <li><a href="/">Home</a></li>
-          <li><a href="/matches">Matches</a></li>
-          <li><a href="/user/<%= user._id %>">Account</a></li>
-        </ul>
-      </nav>
-    </footer>
     <% if ("enabled" in development && development.enabled) { %>
     <script>
       const form = document.querySelector("form[action='/login']")

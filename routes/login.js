@@ -5,7 +5,7 @@ const router = express.Router()
 const { checkNotAuthenticated } = require("../middleware/authentication")
 
 router.get("/", checkNotAuthenticated, (req, res) => {
-  res.status(200).render("login")
+  res.status(200).render("login", { layout: "layout-plain" })
 })
 
 router.post(
