@@ -1,6 +1,6 @@
 <h1>Account page <%= user.name %></h1>
 
-<form action="/account/update/<%= user._id %>?_method=PUT" method="POST">
+<form action="/user/<%= user._id %>/update?_method=PUT" method="POST">
   <div>
     <label for="age">Age</label>
     <input type="number" name="age" id="age" value="<%= user.age %>" />

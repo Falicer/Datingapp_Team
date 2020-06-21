@@ -30,6 +30,31 @@ router.get("/:id", checkAuthenticated, userIdInSession, async (req, res) => {
   }
 })
 
+router.put(
+  "/:id/update",
+  checkAuthenticated,
+  userIdInSession,
+  async (req, res) => {
+    const { id } = req.params
+    const data = req.body
+    const changedData = Object.fromEntries(
+      Object.entries(data).filter(([key, value]) => req.user[key] != value)
+    )
+
+    if (!Object.keys(changedData).length) {
+      return res.redirect(`/user/${id}`)
+    }
+
+    try {
+      await updateUser(id, changedData)
+
+      res.status(200).redirect(`/user/${id}`)
+    } catch (error) {
+      res.status(400).send(error.message)
+    }
+  }
+)
+
 // 1. Authentication (middleware)
 // 2. Do database checks (check for potential duplicates)
 // 3. Like the user (update database)
