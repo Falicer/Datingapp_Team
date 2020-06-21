@@ -30,6 +30,10 @@ router.get("/:chatId", checkAuthenticated, allowInChat, async (req, res) => {
   }
 })
 
+router.get("/:chatId/giphy", checkAuthenticated, allowInChat, (req, res) => {
+  res.render("giphy")
+})
+
 router.post(
   "/:chatId/message",
   checkAuthenticated,
