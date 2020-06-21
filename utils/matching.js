@@ -110,7 +110,7 @@ function getMatches(id) {
   })
 }
 
-function getMatchFromChatId(chatId, _id) {
+function getMatchFromChatId(chatId, { _id }) {
   return new Promise((resolve, reject) => {
     void (async function () {
       try {
