@@ -1,0 +1,28 @@
+<h1>Account page <%= user.name %></h1>
+
+<form action="/account/update/<%= user._id %>?_method=PUT" method="POST">
+    <div>
+      <label for="age">Age</label>
+      <input type="number" name="age" id="age" value="<%= user.age %>" />
+    </div>
+
+    <div>
+      <label for="gender">Gender</label>
+      <select name="gender" id="gender">
+      <option value="male" <% if (user.gender == "male") { %>selected<% } %> >Male</option>
+        <option value="female" <% if (user.gender == "female") { %>selected<% } %> >Female</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="sexuality">Sexuality</label>
+      <select name="sexuality" id="sexuality">
+        <option value="heterosexual" <% if (user.sexuality == "heterosexual") { %>selected<% } %>>Straight</option>
+        <option value="homosexual" <% if (user.sexuality == "homosexual") { %>selected<% } %>>Gay</option>
+        <option value="bisexual" <% if (user.sexuality == "bisexual") { %>selected<% } %>>Bi</option>
+      </select>
+    </div>
+
+    <button type="submit">Done</button>
+  </form>
+</form>
