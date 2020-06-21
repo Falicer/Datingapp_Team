@@ -100,9 +100,12 @@ function getMatches(id) {
   return new Promise((resolve, reject) => {
     void (async function () {
       try {
-        const { matches } = await User.findById(id, "matches")
+        const result = await User.findById(id, "matches")
 
-        resolve(matches)
+        if (!result || !("matches" in result) || !result.matches.length)
+          return resolve([])
+
+        resolve(result.matches)
       } catch (error) {
         reject(error)
       }

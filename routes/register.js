@@ -10,7 +10,7 @@ const { checkNotAuthenticated } = require("../middleware/authentication")
 const { passwordsMatch, isNewUser } = require("../middleware/registration")
 
 router.get("/", checkNotAuthenticated, async (req, res) =>
-  res.status(200).render("register")
+  res.status(200).render("register", { layout: "layout-plain" })
 )
 
 router.post(

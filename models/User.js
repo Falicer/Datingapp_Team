@@ -1,13 +1,14 @@
-const { model, Schema } = require("mongoose")
+const { model, Schema, Types } = require("mongoose")
 
 const MatchSchema = new Schema({
   user: {
-    _id: Schema.ObjectId,
+    _id: Types.ObjectId,
     name: String,
     small_img_url: String,
   },
   chatId: {
-    type: Schema.Types.Mixed,
+    type: Types.ObjectId,
+    ref: "chat",
   },
 })
 
@@ -27,7 +28,7 @@ const UserSchema = new Schema({
   age: Number,
   gender: String,
   sexuality: String,
-  likesReceived: [Schema.ObjectId], // Collect likes received (store other user ids)
+  likesReceived: [{ type: Types.ObjectId, ref: "user" }], // Collect likes received (store other user ids)
   matches: [MatchSchema],
 })
 
