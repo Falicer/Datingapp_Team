@@ -22,6 +22,25 @@ function isAllowedInChat(userId, chatId) {
   })
 }
 
+function addMessage(chatId, { type, message }) {
+  return new Promise((resolve, reject) => {
+    void (async function () {
+      try {
+        const chat = await Chat.findById(chatId)
+
+        chat.messages.push({ type, message })
+
+        await chat.save()
+
+        resolve()
+      } catch (error) {
+        reject(error)
+      }
+    })()
+  })
+}
+
 module.exports = {
   isAllowedInChat,
+  addMessage,
 }
