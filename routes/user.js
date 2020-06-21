@@ -1,7 +1,7 @@
 const express = require("express")
 const router = express.Router()
 
-const { verifyUsers, updateUser } = require("../utils/users")
+const { verifyUsers, updateUser, deleteUser } = require("../utils/users")
 const { likeUser } = require("../utils/userActions")
 const { createMatch, checkIfMatch } = require("../utils/matching")
 
@@ -100,5 +100,23 @@ router.put("/:id/profile/setup", checkAuthenticated, async (req, res) => {
     res.status(400).send(error.message)
   }
 })
+
+router.delete(
+  "/:id/delete",
+  checkAuthenticated,
+  userIdInSession,
+  async (req, res) => {
+    const { id } = req.params
+    try {
+      await deleteUser(id)
+
+      req.logOut()
+      res.status(200).redirect("/login")
+    } catch (error) {
+      console.log(error)
+      res.status(500).send("Internal Server Error")
+    }
+  }
+)
 
 module.exports = router
