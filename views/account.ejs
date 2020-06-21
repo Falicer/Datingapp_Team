@@ -29,3 +29,7 @@
 <form action="/logout?_method=DELETE" method="POST">
   <button type="submit">Log out</button>
 </form>
+
+<form action="/user/<%= user._id %>/delete?_method=DELETE" method="POST">
+  <button type="submit">Delete</button>
+</form>

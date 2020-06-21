@@ -1,6 +1,26 @@
+const mongoose = require("mongoose")
+
 const User = require("../models/User")
+const Chat = require("../models/Chat")
 
 const { definedOnSchema } = require("../helpers")
+
+function _getMatches(id) {
+  return new Promise((resolve, reject) => {
+    void (async function () {
+      try {
+        const result = await User.findById(id, "matches")
+
+        if (!result || !("matches" in result) || !result.matches.length)
+          return resolve([])
+
+        resolve(result.matches)
+      } catch (error) {
+        reject(error)
+      }
+    })()
+  })
+}
 
 function updateUser(id, data) {
   return new Promise((resolve, reject) => {
@@ -136,6 +156,35 @@ function doesExistInUser(query) {
   })
 }
 
+// Removes a user and all the other documents/data where the id pops up
+function deleteUser(id) {
+  return new Promise((resolve, reject) => {
+    void (async function () {
+      try {
+        const matches = await _getMatches(id)
+
+        await Chat.deleteMany({ matchId: { $in: matches } })
+        // Delete matches in other users where user._id == id
+        await User.updateMany(
+          { "matches._id": { $in: matches }, _id: { $ne: id } },
+          {
+            $pull: {
+              matches: { _id: { $in: matches } },
+              likesReceived: mongoose.Types.ObjectId(id),
+            },
+          }
+        )
+
+        await User.findByIdAndDelete(id)
+
+        resolve()
+      } catch (error) {
+        reject(error)
+      }
+    })()
+  })
+}
+
 module.exports = {
   createUser,
   getUserByEmail,
@@ -144,4 +193,5 @@ module.exports = {
   doesExistInUser,
   verifyUsers,
   updateUser,
+  deleteUser,
 }
