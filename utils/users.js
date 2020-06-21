@@ -39,7 +39,7 @@ function updateUser(id, data) {
   })
 }
 
-function createUser(data) {
+function createAndStoreUser(data) {
   return new Promise((resolve, reject) => {
     void (async function () {
       const { name, email, password } = data
@@ -52,7 +52,7 @@ function createUser(data) {
 
       try {
         await user.save()
-        resolve()
+        resolve(user)
       } catch (error) {
         reject(error)
       }
@@ -66,7 +66,7 @@ function getUserByEmail(email) {
       try {
         const user = await User.findOne({ email: email })
 
-        resolve(user)
+        resolve(user || undefined)
       } catch (error) {
         reject(error)
       }
@@ -186,7 +186,7 @@ function deleteUser(id) {
 }
 
 module.exports = {
-  createUser,
+  createAndStoreUser,
   getUserByEmail,
   getUserById,
   doesNotExistInUser,

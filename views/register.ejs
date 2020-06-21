@@ -1,17 +1,24 @@
 <h2>Register an account</h2>
-<% if (messages.error) { %> <%= locals.messages.error %> <% } %>
+
+<% if (messages.errors) { %>
+  <ul class="error-list">
+    <% messages.errors.forEach(error => { %>
+      <li><%= error %></li>
+    <% }) %>
+  </ul>
+<% } %>
 <form action="/register" method="POST">
   <div>
-    <label for="name">Name</label>
-    <input type="text" id="name" name="name" required value="Jesse" />
+    <label for="name">First name</label>
+  <input type="text" id="name" name="name" required value="<% if (messages.nameInputValue) { %><%= nameInputValue %><% } %>"/>
   </div>
   <div>
     <label for="email">Email</label>
-    <input type="email" id="email" name="email" required value="anna@live.nl" />
+    <input type="text" id="email" name="email" required />
   </div>
   <div>
     <label for="password">Password</label>
-    <input type="password" id="password" name="password" required value="123" />
+    <input type="password" id="password" name="password" required />
   </div>
 
   <div>
