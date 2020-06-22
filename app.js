@@ -85,6 +85,9 @@ app.delete("/logout", (req, res) => {
   res.redirect("/login")
 })
 
+// API
+app.use("/api", require("./routes/api"))
+
 app.listen(PORT, async () => {
   console.log(`Server on port: ${PORT}`)
 
