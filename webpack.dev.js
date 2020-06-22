@@ -12,7 +12,10 @@ module.exports = {
     path: path.resolve(__dirname, "dist"),
   },
   plugins: [
-    new webpack.WatchIgnorePlugin([/^((?!src).)*$/]),
+    new webpack.WatchIgnorePlugin([
+      /^((?!src).)*$/,
+      path.join(__dirname, "node_modules"),
+    ]),
     new CleanWebpackPlugin(),
     new CleanWebpackPlugin({
       dry: true,
@@ -27,16 +30,7 @@ module.exports = {
     rules: [
       {
         test: /\.scss$/,
-        use: [
-          "style-loader",
-          {
-            loader: "css-loader",
-            options: {
-              modules: true,
-            },
-          },
-          "sass-loader",
-        ],
+        use: ["style-loader", "css-loader", "sass-loader"],
       },
     ],
   },
