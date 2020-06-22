@@ -23,11 +23,9 @@ function addMessage(chatId, { type, content }) {
   return new Promise((resolve, reject) => {
     void (async function () {
       try {
-        const chat = await Chat.findById(chatId)
-
-        chat.messages.push({ type, content })
-
-        await chat.save()
+        await Chat.findByIdAndUpdate(chatId, {
+          $push: { messages: { type, content } },
+        })
 
         resolve()
       } catch (error) {

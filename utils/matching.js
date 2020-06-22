@@ -29,9 +29,9 @@ function checkIfMatch(...ids) {
   return new Promise((resolve, reject) => {
     void (async function () {
       try {
-        // const haveLikedEachOther = await
-        resolve(await likedEachOther(...ids))
-        // return haveLikedEachOther ? resolve(true) : resolve(false)
+        const isMatch = await likedEachOther(...ids)
+
+        resolve(isMatch)
       } catch (error) {
         reject(error)
       }

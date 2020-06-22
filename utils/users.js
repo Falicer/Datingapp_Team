@@ -52,6 +52,7 @@ function createAndStoreUser(data) {
 
       try {
         await user.save()
+
         resolve(user)
       } catch (error) {
         reject(error)
@@ -83,20 +84,6 @@ function getUserById(id) {
         if (!user) reject(new Error(`User id ${id}, does not exist`))
 
         resolve(user)
-      } catch (error) {
-        reject(error)
-      }
-    })()
-  })
-}
-
-function doesNotExistInUser(query, errorMsg) {
-  return new Promise((resolve, reject) => {
-    void (async function () {
-      try {
-        const exists = await User.exists(query)
-
-        return exists ? reject(errorMsg) : resolve()
       } catch (error) {
         reject(error)
       }
@@ -149,6 +136,20 @@ function doesExistInUser(query) {
         const exists = await User.exists(query)
 
         resolve(exists)
+      } catch (error) {
+        reject(error)
+      }
+    })()
+  })
+}
+
+function doesNotExistInUser(query, errorMsg) {
+  return new Promise((resolve, reject) => {
+    void (async function () {
+      try {
+        const exists = await User.exists(query)
+
+        return exists ? reject(errorMsg) : resolve()
       } catch (error) {
         reject(error)
       }
