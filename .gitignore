@@ -1,3 +1,8 @@
 /node_modules
+
 .env
+
 /dist
+
+# Auto generated file from webpack
+/views/partials/script.ejs
