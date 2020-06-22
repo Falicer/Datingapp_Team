@@ -1,4 +1,5 @@
-const chat = require("./modules/chat")
+import chat from "./modules/chat"
+import "../scss/index.scss"
 
 const giphySection = document.querySelector(".giphy-section")
 let giphySectionToggle, giphiesContainer, giphySearchInput, giphySearchButton
@@ -115,6 +116,8 @@ giphySearchButton.addEventListener("click", async () => {
   }
 })
 
+alert("Hello   fawek faw fer")
+
 giphySectionToggle.addEventListener("click", async () => {
   try {
     const isEnabled = toggleSection(giphySection)
@@ -122,6 +125,7 @@ giphySectionToggle.addEventListener("click", async () => {
     if (isEnabled) {
       const giphies = await getTrendingGiphies()
 
+      console.log("hoi")
       displayGiphies(giphies)
     }
   } catch (error) {
