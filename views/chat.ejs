@@ -15,7 +15,24 @@
   <% }) %>
 </ul>
 
-<a class="chat-footer__giphy-overview-link" href="/chat/<%= chat._id %>/giphy">GIPHY</a>
+<noscript>
+  <a class="chat-footer__giphy-overview-link" href="/chat/<%= chat._id %>/giphy">GIPHY</a>
+</noscript>
+
+
+<section class="giphy-section" class="disabled">
+  <div class="giphy-section__giphies"></div>
+  <footer class="giphy-section__footer">
+    <button class="giphy-section__toggle">GIPHY</button>
+
+    <div class="giphy-section__search-controls">
+      <input class="search__input" type="text">
+      <button class="search__button">Search</button>
+    </div>
+  </footer>
+</section>
+
+
 
 <form action="/chat/<%= chat._id %>/message" method="POST">
   <input type="hidden" name="type" value="text"> <!-- Could be type GIPHY-->
