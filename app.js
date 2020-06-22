@@ -34,10 +34,13 @@ app.locals.development = {}
 if (process.argv.includes("--development")) {
   app.locals.development = {
     enabled: true,
-    email: "jesse@live.nl",
+    email: "anna@live.nl",
     password: "OIjfe98aow",
   }
 }
+
+// Static
+app.use(express.static("dist"))
 
 // EJS & EJS Layouts
 app.set("view engine", "ejs")
