@@ -116,8 +116,6 @@ giphySearchButton.addEventListener("click", async () => {
   }
 })
 
-alert("Hello   fawek faw fer")
-
 giphySectionToggle.addEventListener("click", async () => {
   try {
     const isEnabled = toggleSection(giphySection)
