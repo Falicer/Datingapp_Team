@@ -7,15 +7,15 @@ const flash = require("express-flash")
 const methodOverride = require("method-override")
 const expressEjsLayouts = require("express-ejs-layouts")
 
+// Stop => DeprecationWarning: Mongoose: `findOneAndUpdate()` and `findOneAndDelete()` without the `useFindAndModify` option set to false are deprecated
+mongoose.set("useFindAndModify", false)
+
 // Custom Middleware
 const {
   checkAuthenticated,
   checkNotAuthenticated,
-} = require("./middleware/authentication")
-
-const { setUserVariables } = require("./middleware/localVariables")
-
-mongoose.set("useFindAndModify", false)
+  setUserVariables,
+} = require("./middleware")
 
 // Passport Config
 require("./passport-config")(passport)

@@ -2,8 +2,11 @@ const Chat = require("../models/Chat")
 const User = require("../models/User")
 
 // Helpers
-const { createMatchObject, generateId } = require("../helpers")
-const { getMatchingGender } = require("../helpers/matching")
+const {
+  getMatchingGender,
+  createMatchObject,
+  generateId,
+} = require("../helpers")
 
 // Utils
 const { getUserById, doesNotExistInUser } = require("./users")
