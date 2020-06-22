@@ -1,5 +1,5 @@
 import chat from "./modules/chat"
-import "../scss/index.scss"
+import "../scss/main.scss"
 
 const giphySection = document.querySelector(".giphy-section")
 let giphySectionToggle, giphiesContainer, giphySearchInput, giphySearchButton
