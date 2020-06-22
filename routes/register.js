@@ -1,37 +1,39 @@
 const express = require("express")
 const router = express.Router()
-const bcrypt = require("bcrypt")
+const { hash } = require("bcrypt")
 
 // Utils / Helpers
-const { createUser } = require("../utils/users")
+const { createAndStoreUser } = require("../utils/users")
 
 // Middleware
-const { checkNotAuthenticated } = require("../middleware/authentication")
-const { passwordsMatch, isNewUser } = require("../middleware/registration")
+const { validateInputs } = require("../middleware/registration")
 
-router.get("/", checkNotAuthenticated, async (req, res) =>
+// Routes (GET) : /register
+router.get("/", (req, res) => {
   res.status(200).render("register", { layout: "layout-plain" })
-)
+})
 
-router.post(
-  "/",
-  checkNotAuthenticated,
-  isNewUser,
-  passwordsMatch,
-  async (req, res) => {
+// Routes (POST) : /register
+router.post("/", validateInputs, async (req, res) => {
+  try {
     const { name, email, password } = req.body
+    const hashedPassword = await hash(password, 10)
 
-    try {
-      const hashedPassword = await bcrypt.hash(password, 10)
+    // Store user in database
+    const user = await createAndStoreUser({
+      name,
+      email,
+      password: hashedPassword,
+    })
 
-      await createUser({ name, email, password: hashedPassword })
-
-      res.status(200).redirect("/login")
-    } catch (error) {
-      console.log(error)
-      res.status(500).send("Internal Server Error")
-    }
+    // Loggin after register
+    req.login(user, (err) =>
+      err ? res.status(200).redirect("/login") : res.redirect("/")
+    )
+  } catch (error) {
+    console.log(error)
+    res.status(500).send("Internal Server Error")
   }
-)
+})
 
 module.exports = router

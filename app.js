@@ -1,18 +1,26 @@
 const express = require("express")
 const mongoose = require("mongoose")
 const passport = require("passport")
-const flash = require("express-flash")
 const session = require("express-session")
-const methodOverride = require("method-override")
 const bodyParser = require("body-parser")
+const flash = require("express-flash")
+const methodOverride = require("method-override")
 const expressEjsLayouts = require("express-ejs-layouts")
 
+// Stop => DeprecationWarning: Mongoose: `findOneAndUpdate()` and `findOneAndDelete()` without the `useFindAndModify` option set to false are deprecated
 mongoose.set("useFindAndModify", false)
 
-// Passport config
+// Custom Middleware
+const {
+  checkAuthenticated,
+  checkNotAuthenticated,
+  setUserVariables,
+} = require("./middleware")
+
+// Passport Config
 require("./passport-config")(passport)
 
-// Env config
+// Env Config
 require("dotenv").config()
 
 // Constants
@@ -21,15 +29,18 @@ const PORT = 2000
 // Express Init
 const app = express()
 
+// Local variables for development
 app.locals.development = {}
-// Development mode
 if (process.argv.includes("--development")) {
   app.locals.development = {
     enabled: true,
     email: "anna@live.nl",
-    password: 123,
+    password: "OIjfe98aow",
   }
 }
+
+// Static
+app.use(express.static("dist"))
 
 // EJS & EJS Layouts
 app.set("view engine", "ejs")
@@ -55,22 +66,15 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(passport.initialize())
 app.use(passport.session())
 
-// Other
+// Method Override
 app.use(methodOverride("_method"))
 
-app.use("/login", require("./routes/login"))
-app.use("/register", require("./routes/register"))
-
-app.use((req, res, next) => {
-  if (!req.user) return next()
-
-  res.locals.user = req.user
-  res.locals.isNew = req.user.age == undefined
-
-  next()
-})
-
 // Routes
+app.use("/login", checkNotAuthenticated, require("./routes/login"))
+app.use("/register", checkNotAuthenticated, require("./routes/register"))
+
+// Set local user Object, not for login and register
+app.use(setUserVariables, checkAuthenticated)
 app.use("/", require("./routes/index"))
 app.use("/user", require("./routes/user"))
 app.use("/matches", require("./routes/matches"))

@@ -1,11 +1,11 @@
 const express = require("express")
 const router = express.Router()
 
-const { checkAuthenticated } = require("../middleware/authentication")
-
+// Utils
 const { getMatches } = require("../utils/matching")
 
-router.get("/", checkAuthenticated, async (req, res) => {
+// Routes (GET) : /matches
+router.get("/", async (req, res) => {
   try {
     const matches = await getMatches(req.user._id)
 
