@@ -1,20 +1,22 @@
 const express = require("express")
 const router = express.Router()
 
+// Models
 const Chat = require("../models/Chat")
 
 // Middleware
-const {
-  checkAuthenticated,
-  allowInChat,
-} = require("../middleware/authentication")
+const { allowInChat } = require("../middleware/authentication")
 
 // Utils
-const { getMatchFromChatId } = require("../utils/matching")
-const { addMessage } = require("../utils/chat")
-const { getTrending, searchGiphy } = require("../utils/giphy")
+const {
+  getMatchFromChatId,
+  addMessage,
+  getTrending,
+  searchGiphy,
+} = require("../utils")
 
-router.get("/:chatId", checkAuthenticated, allowInChat, async (req, res) => {
+// Route (GET) : /chat/:id
+router.get("/:chatId", allowInChat, async (req, res) => {
   const { chatId } = req.params
 
   try {
@@ -31,54 +33,42 @@ router.get("/:chatId", checkAuthenticated, allowInChat, async (req, res) => {
   }
 })
 
-router.get(
-  "/:chatId/giphy",
-  checkAuthenticated,
-  allowInChat,
-  async (req, res) => {
-    const { chatId } = req.params
-    const { search = undefined } = req.query
+// Route (GET) : /chat/:id/giphy
+router.get("/:chatId/giphy", allowInChat, async (req, res) => {
+  const chatId = req.params.chatId
+  const { search = undefined } = req.query
 
-    // If no search query => show trending giphies
-    try {
-      if (!search) {
-        const giphies = await getTrending()
+  try {
+    const giphyApiCall = !search ? getTrending : searchGiphy.bind(null, search)
+    const giphies = await giphyApiCall()
 
-        res.status(200).render("giphy", { giphies, chatId })
-      } else {
-        const giphies = await searchGiphy(search)
-
-        res.status(200).render("giphy", { giphies, chatId })
-      }
-    } catch (error) {
-      console.log(error)
-      res.status(500).send("Internal Server Error")
-    }
+    res.status(200).render("giphy", { giphies, chatId })
+  } catch (error) {
+    console.log(error)
+    res.status(500).send("Internal Server Error")
   }
-)
-
-router.post("/:chatId/giphy/search", (req, res) => {
-  const { query } = req.body
-
-  res.redirect(`/chat/${req.params.chatId}/giphy?search=${query}`)
 })
 
-router.post(
-  "/:chatId/message",
-  checkAuthenticated,
-  allowInChat,
-  async (req, res) => {
-    const { chatId } = req.params
-    const { type, content } = req.body
+// Route redirect (POST) : /chat/:id/giphy/search
+router.post("/:chatId/giphy/search", allowInChat, (req, res) => {
+  const chatId = req.params.chatId
+  const query = req.body.query
 
-    try {
-      await addMessage(chatId, { type, content })
+  res.redirect(`/chat/${chatId}/giphy?search=${query}`)
+})
 
-      res.status(200).redirect(`/chat/${chatId}`)
-    } catch (error) {
-      console.log(error)
-    }
+// Route (POST) : /chat/:id/message
+router.post("/:chatId/message", allowInChat, async (req, res) => {
+  const chatId = req.params.chatId
+  const { type, content } = req.body
+
+  try {
+    await addMessage(chatId, { type, content })
+
+    res.status(200).redirect(`/chat/${chatId}`)
+  } catch (error) {
+    console.log(error)
   }
-)
+})
 
 module.exports = router

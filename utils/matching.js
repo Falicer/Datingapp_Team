@@ -2,8 +2,11 @@ const Chat = require("../models/Chat")
 const User = require("../models/User")
 
 // Helpers
-const { createMatchObject, generateId } = require("../helpers")
-const { getMatchingGender } = require("../helpers/matching")
+const {
+  getMatchingGender,
+  createMatchObject,
+  generateId,
+} = require("../helpers")
 
 // Utils
 const { getUserById, doesNotExistInUser } = require("./users")
@@ -29,9 +32,9 @@ function checkIfMatch(...ids) {
   return new Promise((resolve, reject) => {
     void (async function () {
       try {
-        // const haveLikedEachOther = await
-        resolve(await likedEachOther(...ids))
-        // return haveLikedEachOther ? resolve(true) : resolve(false)
+        const isMatch = await likedEachOther(...ids)
+
+        resolve(isMatch)
       } catch (error) {
         reject(error)
       }
