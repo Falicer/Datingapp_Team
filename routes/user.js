@@ -1,5 +1,7 @@
 const express = require("express")
 const router = express.Router()
+const multer = require("multer")
+const { upload } = require("../multer-config")
 
 // Utils
 const {
@@ -71,29 +73,55 @@ router.post("/:id/like", userIdInSession, async (req, res) => {
   }
 })
 
+function customUpload(req, res, next) {
+  upload.single("profile_image")(req, res, (err) => {
+    if (err instanceof multer.MulterError) {
+      console.log(err)
+      return res.redirect("/")
+    } else if (err instanceof Error) {
+      req.flash("error", err.message)
+      return res.redirect("/")
+    }
+
+    res.locals.image_src = req.file.filename
+
+    return next()
+  })
+}
+
 // Route (GET) : /user/:id/profile/setup
-router.put("/:id/profile/setup", userIdInSession, async (req, res) => {
-  const id = req.params.id
-  const { age, sexuality, gender } = req.body
+router.put(
+  "/:id/profile/setup",
+  customUpload,
+  userIdInSession,
+  async (req, res) => {
+    const id = req.params.id
+    const { age, sexuality, gender } = req.body
 
-  if (!age || !sexuality || !gender) {
-    req.flash("error", "You need to fill these values in")
-    return res.redirect("/")
+    if (!age || !sexuality || !gender) {
+      req.flash("error", "You need to fill these values in")
+      return res.redirect("/")
+    }
+
+    if (age > 70 || age < 18) {
+      req.flash("error", "You need to be 18 to continue")
+      return res.redirect("/")
+    }
+
+    try {
+      await updateUser(id, {
+        age,
+        sexuality,
+        gender,
+        image_src: res.locals.image_src || "",
+      })
+
+      res.status(200).redirect("/")
+    } catch (error) {
+      res.status(400).send(error.message)
+    }
   }
-
-  if (age > 70 || age < 18) {
-    req.flash("error", "You need to be 18 to continue")
-    return res.redirect("/")
-  }
-
-  try {
-    await updateUser(id, { age, sexuality, gender })
-
-    res.status(200).redirect("/")
-  } catch (error) {
-    res.status(400).send(error.message)
-  }
-})
+)
 
 // Route (DELETE) : /user/:id/delete
 router.delete("/:id/delete", userIdInSession, async (req, res) => {

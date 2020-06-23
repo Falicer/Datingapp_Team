@@ -5,14 +5,14 @@ const _emptyModel = model("_", _schema)
 const generateId = () => new _emptyModel()._id
 
 const createMatchObject = (id, user, chatId) => {
-  const { _id, name, small_img_url } = user
+  const { _id, name, image_src } = user
 
   return {
     _id: id,
     user: {
       _id,
       name,
-      small_img_url,
+      image_src,
     },
     chatId,
   }
