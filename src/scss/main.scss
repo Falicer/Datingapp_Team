@@ -445,29 +445,56 @@ button,
   &-footer {
     // position: sticky;
     // bottom: 0;
-
+    background: $red;
+    width: 100%;
     display: flex;
     flex-direction: column;
 
     &__giphies-container {
+      display: none;
       width: 100vw;
-      overflow-x: scroll;
-    }
-    &__giphies {
-      display: flex;
+
+      &.show {
+        display: block;
+        overflow-x: scroll;
+      }
     }
 
     &__controls {
       display: flex;
       width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 8px 0;
 
       & > * {
+        box-shadow: none;
+        background: none;
+      }
+
+      & > input {
         flex-grow: 1;
+        background: white;
       }
     }
   }
 }
 
+.giphy-section__giphies {
+  display: flex;
+  flex-wrap: nowrap;
+  height: 150px;
+
+  .giphy-block {
+    height: 100%;
+
+    img {
+      height: 100%;
+      width: auto;
+      object-fit: cover;
+    }
+  }
+}
 // User
 .users {
   &__list {
@@ -598,4 +625,17 @@ button,
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.chat__messages {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.message__date {
+  display: none;
+}
+
+.message__text {
+  color: white;
 }

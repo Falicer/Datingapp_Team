@@ -24,28 +24,6 @@
     <a class="chat-footer__giphy-overview-link" href="/chat/<%= chat._id %>/giphy">GIPHY</a>
   </noscript>
 
-  <!-- <footer class="chat-footer">
-    <section class="giphy-section" class="disabled">
-      <div class="giphy-section__giphies-container">
-        <div class="giphy-section__giphies"></div>
-      </div>
-      <footer class="giphy-section__footer">
-        <button class="giphy-section__toggle">GIPHY</button>
-
-        <div class="giphy-section__search-controls">
-          <input class="search__input" type="text">
-          <button class="search__button">Search</button>
-        </div>
-      </footer>
-    </section>
-
-    <form class="chat-footer__message-bar" action="/chat/<%= chat._id %>/message" method="POST">
-      <input type="hidden" name="type" value="text"> 
-      <input type="text" name="content">
-      <button type="submit">Send</button>
-    </form>
-  </footer> -->
-
 
   <footer class="chat-footer">
     <form class="chat__form" action="/chat/<%= chat._id %>/message" method="POST">
@@ -53,10 +31,11 @@
       <div class="giphy-section__giphies"></div>
     </section>
     <div class="chat-footer__controls">
-      <button class="chat-footer__controls-giphy">GIPHY</button>
-      <input type="hidden" name="type" value="text">
+      <button type="button" class="chat-footer__controls-giphy"><i class="fa fa-file-photo-o"></i></button>
+      <input id="message-type" type="hidden" name="type" value="text">
+      <input id="message-content" type="hidden" name="" value="">
       <input class="chat-footer__controls-text" type="text" name="content">
-      <button class="chat-footerclass="giphy-section__toggle">Send</button>
+      <button class="send__input"><i class="fa fa-paper-plane"></i></button>
     </div>
     </form>
   </footer>

@@ -1,13 +1,68 @@
 import "../scss/main.scss"
+import giphy from "../../utils/giphy"
 
-const giphySection = document.querySelector(".giphy-section")
-let giphySectionToggle, giphiesContainer, giphySearchInput, giphySearchButton
+const giphySection = document.querySelector(".chat-footer__giphies-container")
+let giphySectionToggle,
+  chatForm,
+  giphiesContainer,
+  giphySearchInput,
+  giphySearchButton,
+  sendButton,
+  chatInput,
+  messageTypeInput,
+  messageContentInput
 
 if (giphySection) {
-  giphySectionToggle = giphySection.querySelector(".giphy-section__toggle")
-  giphiesContainer = giphySection.querySelector(".giphy-section__giphies")
-  giphySearchInput = giphySection.querySelector(".search__input")
-  giphySearchButton = giphySection.querySelector(".search__button")
+  chatForm = document.querySelector(".chat__form")
+  giphySectionToggle = document.querySelector(".chat-footer__controls-giphy")
+  giphiesContainer = document.querySelector(".giphy-section__giphies")
+  chatInput = document.querySelector(".chat-footer__controls-text")
+  sendButton = document.querySelector(".send__input")
+  messageTypeInput = document.querySelector("#message-type")
+  messageContentInput = document.querySelector("#message-content")
+
+  giphySectionToggle.addEventListener("click", async () => {
+    const isHidden = toggleSection(giphySection)
+
+    if (!isHidden) {
+      const trendingGiphies = await getTrendingGiphies()
+      chatInput.name = ""
+      messageContentInput.name = "content"
+
+      messageTypeInput.value = "giphy"
+      sendButton.type = "button"
+
+      giphySearchInput = chatInput
+      giphySearchButton = sendButton
+
+      sendButton.innerHTML = "<i class='fa fa-search'></i>"
+
+      giphySearchButton.addEventListener("click", async () => {
+        const query = giphySearchInput.value
+
+        const giphies = await getSearchedGiphies(query)
+
+        if (containsGiphies) return updateGiphies(giphies)
+
+        displayGiphies(giphies)
+      })
+
+      // if (containsGiphies) return updateGiphies(trendingGiphies)
+
+      displayGiphies(trendingGiphies)
+    } else {
+      chatInput.name = "content"
+      messageContentInput.name = ""
+
+      messageTypeInput = "text"
+      sendButton.type = "submit"
+
+      sendButton.innerHTML = "<i class='fa fa-paper-plane'></i>"
+
+      giphySearchInput = undefined
+      giphySearchButton = undefined
+    }
+  })
 }
 
 function getTrendingGiphies() {
@@ -59,6 +114,14 @@ function displayGiphies(giphies) {
     const giphyBlock = createGiphyBlock(src, alt)
 
     giphiesContainer.appendChild(giphyBlock)
+
+    giphyBlock.addEventListener("click", () => {
+      const src = giphyBlock.querySelector("img").src
+
+      messageContentInput.value = src
+
+      chatForm.submit()
+    })
   })
 }
 
@@ -92,47 +155,65 @@ function updateGiphies(giphies) {
 }
 
 function toggleSection(element) {
-  element.classList.toggle("disabled")
+  element.classList.toggle("show")
 
-  return !element.classList.contains("disabled")
+  return !element.classList.contains("show")
 }
 
 function containsGiphies() {
-  return giphiesContainer.querySelector(".giphy-block").length > 0
+  return giphySection.querySelector(".giphy-block").length > 0
 }
 
-if (giphySearchButton) {
-  giphySearchButton.addEventListener("click", async () => {
-    const query = giphySearchInput.value || undefined
+// if (giphySectionToggle) {
+//   giphySectionToggle.addEventListener("click", async () => {
+//     const isEnabled = toggleSection(giphySection)
 
-    try {
-      const giphies = await getSearchedGiphies(query)
+//     if (isEnabled) {
+//       sendButton.addEventListener("click", async () => {
+//         const query = giphySearchInput.value
 
-      if (containsGiphies) return updateGiphies(giphies)
+//         try {
+//           const giphies = await getSearchedGiphies(query)
 
-      displayGiphies(giphies)
-    } catch (error) {
-      console.log(error)
-    }
-  })
-}
+//           if (containsGiphies) return updateGiphies(giphies)
 
-if (giphySectionToggle) {
-  giphySectionToggle.addEventListener("click", async () => {
-    try {
-      const isEnabled = toggleSection(giphySection)
+//           displayGiphies(giphies)
+//         } catch (error) {
+//           console.log(error)
+//         }
+//       })
+//     }
 
-      if (isEnabled) {
-        const giphies = await getTrendingGiphies()
+//     const query = giphySearchInput.value || undefined
 
-        console.log("hoi")
-        displayGiphies(giphies)
-      }
-    } catch (error) {
-      console.log(error)
-    }
-  })
-}
+//     try {
+//       let giphies
+//       if (!query) {
+//       } else {
+//       }
+
+//       if (containsGiphies) return updateGiphies(giphies)
+
+//       displayGiphies(giphies)
+//     } catch (error) {
+//       console.log(error)
+//     }
+//   })
+// }
+
+// if (giphySectionToggle) {
+//   giphySectionToggle.addEventListener("click", async () => {
+//     try {
+//       if (isEnabled) {
+//         const giphies = await getTrendingGiphies()
+
+//         displayGiphies(giphies)
+//       }
+//     } catch (error) {
+//       console.log(error)
+//     }
+//   })
+// }
 
 // Account pop up
 const userDeleteForm = document.querySelector(".user-delete-form")
