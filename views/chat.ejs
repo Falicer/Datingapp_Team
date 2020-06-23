@@ -1,41 +1,63 @@
-<h1>Chat</h1>
+<div class="chat">
+  <a class="back-btn" href="/matches">Back</a>
+  <main class="chat__content-container">
+    <ul class="chat__messages">
+      <%= user._id %>
+      <% chat.messages.forEach((message) => { %>
+        <%= message.userId %>
+        
+      <li class="message <% if (message.userId == user._id) { %> message--mine <% } %>">
+          <% if (message.type == "giphy") { %>
+            <img class="message__giphy" src="<%= message.content %>">
+          <% } else if (message.type == "text") { %>
+            <p class="message__text"><%= message.content %></p>
+          <% } %>
+          <footer class="message__date">
+            <small><%= message.date %></small>
+          </footer>
+        </li>
+      <% }) %>
+    </ul>
+  </main>
 
-<ul>
-  <% chat.messages.forEach((message) => { %>
-    <li>
-      <% if (message.type == "giphy") { %>
-        <img src="<%= message.content %>">
-      <% } else if (message.type == "text") { %>
-        <p><%= message.content %></p>
-      <% } %>
-      <footer>
-        <small><%= message.date %></small>
+  <noscript>
+    <a class="chat-footer__giphy-overview-link" href="/chat/<%= chat._id %>/giphy">GIPHY</a>
+  </noscript>
+
+  <!-- <footer class="chat-footer">
+    <section class="giphy-section" class="disabled">
+      <div class="giphy-section__giphies-container">
+        <div class="giphy-section__giphies"></div>
+      </div>
+      <footer class="giphy-section__footer">
+        <button class="giphy-section__toggle">GIPHY</button>
+
+        <div class="giphy-section__search-controls">
+          <input class="search__input" type="text">
+          <button class="search__button">Search</button>
+        </div>
       </footer>
-    </li>
-  <% }) %>
-</ul>
+    </section>
 
-<noscript>
-  <a class="chat-footer__giphy-overview-link" href="/chat/<%= chat._id %>/giphy">GIPHY</a>
-</noscript>
+    <form class="chat-footer__message-bar" action="/chat/<%= chat._id %>/message" method="POST">
+      <input type="hidden" name="type" value="text"> 
+      <input type="text" name="content">
+      <button type="submit">Send</button>
+    </form>
+  </footer> -->
 
 
-<section class="giphy-section" class="disabled">
-  <div class="giphy-section__giphies"></div>
-  <footer class="giphy-section__footer">
-    <button class="giphy-section__toggle">GIPHY</button>
-
-    <div class="giphy-section__search-controls">
-      <input class="search__input" type="text">
-      <button class="search__button">Search</button>
+  <footer class="chat-footer">
+    <form class="chat__form" action="/chat/<%= chat._id %>/message" method="POST">
+    <section class="chat-footer__giphies-container">
+      <div class="giphy-section__giphies"></div>
+    </section>
+    <div class="chat-footer__controls">
+      <button class="chat-footer__controls-giphy">GIPHY</button>
+      <input type="hidden" name="type" value="text">
+      <input class="chat-footer__controls-text" type="text" name="content">
+      <button class="chat-footerclass="giphy-section__toggle">Send</button>
     </div>
+    </form>
   </footer>
-</section>
-
-
-
-<form action="/chat/<%= chat._id %>/message" method="POST">
-  <input type="hidden" name="type" value="text"> <!-- Could be type GIPHY-->
-  <input type="text" name="content">
-  <button type="submit">Send</button>
-</form>
+</div>

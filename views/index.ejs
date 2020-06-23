@@ -1,10 +1,24 @@
-<% otherUsers.forEach((otherUser) => { %>
-  <%= otherUser.name %>
-  <form action="/user/<%= user._id %>/like?userId=<%= otherUser._id %>" method="POST">
-    <button type="submit">Like</button>
-  </form>
-<% }) %>
+<main class="users">
+  <ul class="users__list">
+    <% otherUsers.forEach((otherUser) => { %>
+      <li class="users__list-item">
+        <article class="user-card">
+          <div class="user-card__image-container">
+            <img src="/<%= otherUser.image_src %>" alt="">
+          </div>
 
-<form action="/logout?_method=DELETE" method="POST">
-  <button type="submit">Logout</button>
-</form>
+          <div class="flex-container--column">
+            <form class="user-card__controls" action="/user/<%= user._id %>/like?userId=<%= otherUser._id %>" method="POST">
+              <button class="like-button" type="submit"><i class="fa fa-heart"></i></button>
+            </form>
+
+            <footer class="user-card__info">
+              <h2 class="user-card__info-name"><%= otherUser.name %></h2>
+              <h3 class="user-card__info-age"><%= otherUser.age %></h3>
+            </footer>
+          </div>
+        </article>
+      </li>
+    <% }) %>
+  </ul>
+</main>
