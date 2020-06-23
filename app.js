@@ -25,7 +25,7 @@ require("./passport-config")(passport)
 require("dotenv").config()
 
 // Constants
-const PORT = 2000 || process.env.PORT
+const PORT = process.env.PORT || 2000
 
 // Express Init
 const app = express()
