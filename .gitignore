@@ -6,3 +6,5 @@
 
 # Auto generated file from webpack
 /views/partials/script.ejs
+
+/uploads
