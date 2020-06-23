@@ -1,8 +1,9 @@
-const { model, Schema } = require("mongoose")
+const { model, Schema, Types } = require("mongoose")
 
 const MessageSchema = new Schema({
   type: String,
   content: String, // Either a link to a gipihy or text message
+  userId: Types.ObjectId,
   date: {
     type: Date,
     default: Date.now,
@@ -12,7 +13,7 @@ const MessageSchema = new Schema({
 const ChatSchema = new Schema(
   {
     matchId: {
-      type: Schema.ObjectId,
+      type: Types.ObjectId,
       required: true,
     },
     messages: [MessageSchema],
