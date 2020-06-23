@@ -127,7 +127,7 @@ router.put(
 router.delete("/:id/delete", userIdInSession, async (req, res) => {
   const { id } = req.params
   try {
-    await deleteUser(id)
+    await deleteUser(id, req.user.image_src)
 
     req.logOut()
     res.status(200).redirect("/login")

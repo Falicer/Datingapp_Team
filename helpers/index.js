@@ -1,3 +1,5 @@
+const fs = require("fs")
+
 const { Schema, model } = require("mongoose")
 
 const _schema = new Schema({})
@@ -56,9 +58,20 @@ function getMatchingGender(sexuality, gender) {
   }
 }
 
+function deleteUserImage(_path) {
+  return new Promise((resolve) => {
+    fs.unlink(_path, (err) => {
+      if (err) console.log(err)
+
+      resolve()
+    })
+  })
+}
+
 module.exports = {
   generateId,
   createMatchObject,
   definedOnSchema,
   getMatchingGender,
+  deleteUserImage,
 }

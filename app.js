@@ -15,6 +15,7 @@ const {
   checkAuthenticated,
   checkNotAuthenticated,
   setUserVariables,
+  useBackgroundImages,
 } = require("./middleware")
 
 // Passport Config
@@ -34,13 +35,15 @@ app.locals.development = {}
 if (process.argv.includes("--development")) {
   app.locals.development = {
     enabled: true,
-    email: "anna@live.nl",
-    password: "OIjfe98aow",
+    email: "jesse@live.nl",
+    password: "1234567890A",
   }
 }
 
 // Static
 app.use(express.static("dist"))
+app.use(express.static("assets"))
+app.use(express.static("uploads"))
 
 // EJS & EJS Layouts
 app.set("view engine", "ejs")
@@ -68,6 +71,9 @@ app.use(passport.session())
 
 // Method Override
 app.use(methodOverride("_method"))
+
+// Styling (Images) Middleware
+app.use(useBackgroundImages)
 
 // Routes
 app.use("/login", checkNotAuthenticated, require("./routes/login"))
