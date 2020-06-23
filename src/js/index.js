@@ -1,4 +1,3 @@
-import chat from "./modules/chat"
 import "../scss/main.scss"
 
 const giphySection = document.querySelector(".giphy-section")
@@ -102,31 +101,57 @@ function containsGiphies() {
   return giphiesContainer.querySelector(".giphy-block").length > 0
 }
 
-giphySearchButton.addEventListener("click", async () => {
-  const query = giphySearchInput.value || undefined
+if (giphySearchButton) {
+  giphySearchButton.addEventListener("click", async () => {
+    const query = giphySearchInput.value || undefined
 
-  try {
-    const giphies = await getSearchedGiphies(query)
+    try {
+      const giphies = await getSearchedGiphies(query)
 
-    if (containsGiphies) return updateGiphies(giphies)
+      if (containsGiphies) return updateGiphies(giphies)
 
-    displayGiphies(giphies)
-  } catch (error) {
-    console.log(error)
-  }
-})
-
-giphySectionToggle.addEventListener("click", async () => {
-  try {
-    const isEnabled = toggleSection(giphySection)
-
-    if (isEnabled) {
-      const giphies = await getTrendingGiphies()
-
-      console.log("hoi")
       displayGiphies(giphies)
+    } catch (error) {
+      console.log(error)
     }
-  } catch (error) {
-    console.log(error)
+  })
+}
+
+if (giphySectionToggle) {
+  giphySectionToggle.addEventListener("click", async () => {
+    try {
+      const isEnabled = toggleSection(giphySection)
+
+      if (isEnabled) {
+        const giphies = await getTrendingGiphies()
+
+        console.log("hoi")
+        displayGiphies(giphies)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  })
+}
+
+// Account pop up
+const userDeleteForm = document.querySelector(".user-delete-form")
+
+function togglePopUp(element) {
+  element.classList.toggle("pop-up--is-open")
+
+  if (element.classList.contains("pop-up--is-open")) {
+    document.body.style.overflow = "hidden"
+  } else {
+    document.body.removeAttribute("style")
   }
-})
+}
+
+if (userDeleteForm) {
+  const btns = userDeleteForm.querySelectorAll(".form__button--toggle-pop-up")
+  const popUpContainer = userDeleteForm.querySelector(".pop-up__container")
+
+  for (let i = 0; i < btns.length; i++) {
+    btns[i].addEventListener("click", togglePopUp.bind(null, popUpContainer))
+  }
+}
