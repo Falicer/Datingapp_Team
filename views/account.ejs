@@ -1,7 +1,15 @@
 <h1 class="font--huge">John</h1>
 
 <div class="account__image-container">
-  <img src="/<%= user.image_src %>" alt="">
+  <% if (!user.image_src) { %>
+    <% if (user.gender == "male") { %>
+      <img src="/image_male.png" alt="">
+      <% } else { %>
+      <img src="/image_female.png" alt="">
+      <% } %>
+    <% } else { %>
+      <img src="/<%= user.image_src %>" alt="">
+  <% } %>
 </div>
 
 <form class="form" action="/user/<%= user._id %>/update?_method=PUT" method="POST">

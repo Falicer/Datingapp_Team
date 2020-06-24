@@ -35,7 +35,7 @@ app.locals.development = {}
 if (process.argv.includes("--development")) {
   app.locals.development = {
     enabled: true,
-    email: "jesse@live.nl",
+    email: "johndoe@live.nl",
     password: "1234567890A",
   }
 }

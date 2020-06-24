@@ -9,7 +9,7 @@ module.exports = merge(common, {})
 
 module.exports = {
   mode: "production",
-  entry: ["./src/js/index.js", "./src/scss/css.js"],
+  entry: "./src/js/index.js",
   output: {
     filename: "[contenthash].js",
     publicPath: "/",
