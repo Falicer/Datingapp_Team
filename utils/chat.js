@@ -19,12 +19,12 @@ function isAllowedInChat(userId, chatId) {
   })
 }
 
-function addMessage(chatId, { type, content }) {
+function addMessage(chatId, { type, content, userId }) {
   return new Promise((resolve, reject) => {
     void (async function () {
       try {
         await Chat.findByIdAndUpdate(chatId, {
-          $push: { messages: { type, content } },
+          $push: { messages: { type, content, userId } },
         })
 
         resolve()

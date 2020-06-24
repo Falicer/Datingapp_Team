@@ -1,19 +1,30 @@
 <div class="chat">
-  <a class="back-btn" href="/matches">Back</a>
+  <a class="back-btn" href="/matches"><i class="fa fa-sign-out"></i></a>
   <main class="chat__content-container">
     <ul class="chat__messages">
-      <%= user._id %>
-      <% chat.messages.forEach((message) => { %>
-        <%= message.userId %>
-        
-      <li class="message <% if (message.userId == user._id) { %> message--mine <% } %>">
+      <% chat.messages.forEach((message, index) => { %>
+        <% const previousMessageDate = new Date(index > 0 ? chat.messages[index - 1].date : message.date) %>
+        <% const currentMessageDate = new Date(message.date) %>
+        <% const sameMinute = (currentMessageDate - previousMessageDate) / (1000 * 60) <= 1 %>
+        <% const _hours = currentMessageDate.getHours() %>
+        <% const _minutes = currentMessageDate.getMinutes() %>
+        <% const hours = _hours < 10 ? `0${_hours}` : _hours %>
+        <% const minutes = _minutes < 10 ? `0${_minutes}` : _minutes %>
+       
+        <li class="message <% if (sameMinute) { %>message--same-minute<% } %> <% if (String(message.userId) == String(user._id)) { %>message--mine<% } %>">
           <% if (message.type == "giphy") { %>
             <img class="message__giphy" src="<%= message.content %>">
           <% } else if (message.type == "text") { %>
             <p class="message__text"><%= message.content %></p>
           <% } %>
           <footer class="message__date">
-            <small><%= message.date %></small>
+            <% if (!sameMinute) { %>
+              <% if (previousMessageDate.getDay() != currentMessageDate.getDay()) { %>
+                <small><%= currentMessageDate.toString().spit(" ")[0] %><%= hours %>:<%= minutes %></small>
+              <% } else { %>
+                <small><%= hours %>:<%= minutes %></small>
+              <% } %> 
+            <% } %> 
           </footer>
         </li>
       <% }) %>
@@ -34,7 +45,7 @@
       <button type="button" class="chat-footer__controls-giphy"><i class="fa fa-file-photo-o"></i></button>
       <input id="message-type" type="hidden" name="type" value="text">
       <input id="message-content" type="hidden" name="" value="">
-      <input class="chat-footer__controls-text" type="text" name="content">
+      <input required class="chat-footer__controls-text" type="text" name="content">
       <button class="send__input"><i class="fa fa-paper-plane"></i></button>
     </div>
     </form>

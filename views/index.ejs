@@ -8,13 +8,15 @@
           </div>
           
           <div class="flex-container--column">
-            <form class="user-card__controls" action="/user/<%= user._id %>/dislike?userId=<%= otherUser._id %>" method="POST">
-              <button class="dislike-button" type="submit"><i class="fa fa-heart"></i></button>
-            </form>
+            <div class="user-card__buttons-container">
+              <form class="user-card__controls" action="/user/<%= user._id %>/dislike?userId=<%= otherUser._id %>" method="POST">
+                <button class="dislike-button" type="submit"><i class="fa fa-thumbs-down"></i></button>
+              </form>
 
-            <form class="user-card__controls" action="/user/<%= user._id %>/like?userId=<%= otherUser._id %>" method="POST">
-              <button class="like-button" type="submit"><i class="fa fa-heart"></i></button>
-            </form>
+              <form class="user-card__controls" action="/user/<%= user._id %>/like?userId=<%= otherUser._id %>" method="POST">
+                <button class="like-button" type="submit"><i class="fa fa-thumbs-up"></i></button>
+              </form>
+          </div>
 
             <footer class="user-card__info">
               <h2 class="user-card__info-name"><%= otherUser.name %></h2>

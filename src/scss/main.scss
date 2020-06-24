@@ -1,5 +1,6 @@
 // Variables
 $red: #c90d3c;
+$green: #0cc94b;
 $blue: #0264d6;
 $orange: #e09902;
 $light-grey: #ebebeb;
@@ -34,6 +35,19 @@ $grey: #777;
   -webkit-box-shadow: $shadow;
   -moz-box-shadow: $shadow;
   box-shadow: $shadow;
+}
+
+@mixin icon-button {
+  padding: 16px;
+  line-height: 0;
+  text-align: center;
+  border-radius: 100%;
+
+  &:hover {
+    i {
+      animation: scaling 0.3s ease 0.15s alternate infinite;
+    }
+  }
 }
 
 // Reset
@@ -394,9 +408,14 @@ button,
 // Chat
 
 .back-btn {
+  @include icon-button;
   position: fixed;
   top: 5vw;
   left: 5vw;
+  transform: scaleX(-1);
+  background: $red;
+  color: white;
+  font-size: 1.5em;
 
   @include for-tablet-up() {
     left: 7.5vw;
@@ -429,15 +448,56 @@ button,
   }
 
   &__messages {
+    padding: 120px 0 40px;
     display: flex;
     flex-direction: column;
 
     .message {
-      width: 90%;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
       align-self: flex-start;
+      color: white;
+      margin-bottom: 8px;
+
+      &:not(.message--mine) + .message--mine {
+        margin-top: 12px;
+      }
+
+      &:not(.message--same-minute) {
+        margin-bottom: 16px;
+      }
+
+      &__giphy {
+        @include box-shadow(0px 5px 10px 0px rgba(0, 0, 0, 0.38));
+        border-radius: 12px;
+      }
 
       &--mine {
         align-self: flex-end;
+
+        .message__text {
+          background: $blue;
+
+          border-radius: 20px/5px 5px 5px 20px;
+        }
+      }
+
+      &__text {
+        @include box-shadow(0px 5px 10px 0px rgba(0, 0, 0, 0.38));
+        background: $red;
+        padding: 8px 12px;
+
+        border-radius: 5px 20px/5px 5px 20px;
+      }
+
+      &__date {
+        align-self: inherit;
+
+        small {
+          opacity: 0.8;
+          font-size: 0.75rem;
+        }
       }
     }
   }
@@ -510,7 +570,7 @@ button,
     }
 
     &-item:not(:last-child) {
-      margin-bottom: 50px;
+      margin-bottom: 70px;
     }
   }
 }
@@ -556,6 +616,7 @@ button,
     align-items: center;
     color: white;
     margin-top: 32px;
+    white-space: nowrap;
 
     &-age {
       margin-left: 20px;
@@ -563,7 +624,22 @@ button,
     }
   }
 
-  &__controls {
+  &__buttons-container {
+    display: flex;
+    flex-direction: column;
+
+    @include for-mobile() {
+      flex-direction: row;
+
+      form:not(:last-of-type) {
+        margin-right: 48px;
+        margin-bottom: 0;
+      }
+    }
+
+    form:not(:last-of-type) {
+      margin-bottom: 32px;
+    }
   }
 }
 
@@ -584,24 +660,23 @@ button,
   }
 }
 
-@mixin icon-button {
-  padding: 16px;
-  line-height: 0;
-  text-align: center;
-  border-radius: 100%;
+@keyframes scaling {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.2);
+  }
+}
+
+.dislike-button {
+  @include icon-button;
+  background: $red;
 }
 
 .like-button {
   @include icon-button;
-  background: $red;
-
-  &:hover {
-    animation: beatingHeart 0.3s ease alternate infinite;
-
-    i {
-      animation: beatingHeart 0.3s ease alternate-reverse infinite;
-    }
-  }
+  background: $green;
 }
 
 .chat-button {
@@ -610,15 +685,6 @@ button,
   background: $blue;
 
   color: white !important;
-}
-
-@keyframes beatingHeart {
-  0% {
-    transform: scale(1);
-  }
-  100% {
-    transform: scale(1.2);
-  }
 }
 
 .flex-container--column {
@@ -630,12 +696,4 @@ button,
 .chat__messages {
   max-width: 500px;
   margin: 0 auto;
-}
-
-.message__date {
-  display: none;
-}
-
-.message__text {
-  color: white;
 }
