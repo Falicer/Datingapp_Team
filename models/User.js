@@ -4,7 +4,7 @@ const MatchSchema = new Schema({
   user: {
     _id: Types.ObjectId,
     name: String,
-    small_img_url: String,
+    image_src: String,
   },
   chatId: {
     type: Types.ObjectId,
@@ -21,6 +21,7 @@ const UserSchema = new Schema({
     type: String,
     require: true,
   },
+  image_src: String,
   password: {
     type: String,
     require: true,

@@ -15,6 +15,7 @@ const {
   checkAuthenticated,
   checkNotAuthenticated,
   setUserVariables,
+  useBackgroundImages,
 } = require("./middleware")
 
 // Passport Config
@@ -24,7 +25,7 @@ require("./passport-config")(passport)
 require("dotenv").config()
 
 // Constants
-const PORT = 2000
+const PORT = process.env.PORT || 2000
 
 // Express Init
 const app = express()
@@ -34,13 +35,15 @@ app.locals.development = {}
 if (process.argv.includes("--development")) {
   app.locals.development = {
     enabled: true,
-    email: "anna@live.nl",
-    password: "OIjfe98aow",
+    email: "jesse@live.nl",
+    password: "1234567890A",
   }
 }
 
 // Static
 app.use(express.static("dist"))
+app.use(express.static("assets"))
+app.use(express.static("uploads"))
 
 // EJS & EJS Layouts
 app.set("view engine", "ejs")
@@ -69,6 +72,9 @@ app.use(passport.session())
 // Method Override
 app.use(methodOverride("_method"))
 
+// Styling (Images) Middleware
+app.use(useBackgroundImages)
+
 // Routes
 app.use("/login", checkNotAuthenticated, require("./routes/login"))
 app.use("/register", checkNotAuthenticated, require("./routes/register"))
@@ -84,6 +90,9 @@ app.delete("/logout", (req, res) => {
   req.logOut()
   res.redirect("/login")
 })
+
+// API
+app.use("/api", require("./routes/api"))
 
 app.listen(PORT, async () => {
   console.log(`Server on port: ${PORT}`)

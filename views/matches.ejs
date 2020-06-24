@@ -1,4 +1,22 @@
-<% matches.forEach((match) => { %>
-  <%= match.user.name %>
-  <a href="/chat/<%= match.chatId %>">Chat</a><br>
-<% }) %>
+<main class="users">
+  <ul class="users__list">
+    <% matches.forEach((match) => { %>
+      <li class="users__list-item">
+        <article class="user-card">
+          <div class="user-card__image-container">
+            <img src="/<%= match.user.image_src %>" alt="">
+          </div>
+
+          <div class="flex-container--column">
+            <a class="chat-button" href="/chat/<%= match.chatId %>"><i class="fa fa-comment"></i></a><br>
+
+            <footer class="user-card__info">
+              <h2 class="user-card__info-name"><%= match.user.name %></h2>
+              <h3 class="user-card__info-age"><%= match.user.age %></h3>
+            </footer>
+          </div>
+        </article>
+      </li>
+    <% }) %>
+  </ul>
+</main>

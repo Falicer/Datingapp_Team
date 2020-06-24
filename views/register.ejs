@@ -1,36 +1,45 @@
-<h2>Register an account</h2>
+<main class="login">
+  <h1 class="font--huge">Register</h1>
 
-<% if (messages.errors) { %>
-  <ul class="error-list">
-    <% messages.errors.forEach(error => { %>
-      <li><%= error %></li>
-    <% }) %>
-  </ul>
-<% } %>
-<form action="/register" method="POST">
-  <div>
-    <label for="name">First name</label>
-  <input type="text" id="name" name="name" required value="<% if (messages.nameInputValue) { %><%= nameInputValue %><% } %>"/>
-  </div>
-  <div>
-    <label for="email">Email</label>
-    <input type="text" id="email" name="email" required />
-  </div>
-  <div>
-    <label for="password">Password</label>
-    <input type="password" id="password" name="password" required />
-  </div>
+  <div class="register-form__container">
+    <form class="register-form form" action="/register" method="POST">
+      <ul class="form__error-list">
+        <% if (messages.errors) { %>
+          <% messages.errors.forEach(error => { %>
+            <li class="form__error-message"><%= error %></li>
+          <% }) %>
+        <% } %>
+      </ul>  
 
-  <div>
-    <label for="password2">Repeat Password</label>
-    <input
-      type="password"
-      id="password2"
-      name="password2"
-      required
-      value="123"
-    />
+      <div class="form__field">
+        <label for="name">First name</label>
+        <input type="text" id="name" name="name" required value="<% if (messages.nameInputValue) { %><%= nameInputValue %><% } %>"/>
+      </div>
+
+      <div class="form__field">
+        <label for="email">Email</label>
+        <input type="text" id="email" name="email" required />
+      </div>
+
+      <div class="form__field">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required />
+      </div>
+
+      <div class="form__field">
+        <label for="password2">Repeat Password</label>
+        <input
+          type="password"
+          id="password2"
+          name="password2"
+          required
+          value="123"
+        />
+      </div>
+
+
+      <button class="form__submit" type="submit">Register</button>
+      <a href="/login">Login</a>
+    </form>
   </div>
-  <button type="submit">Register</button>
-</form>
-<a href="/login">Login</a>
+</main>

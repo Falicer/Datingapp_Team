@@ -1,24 +1,42 @@
-<h1>Chat</h1>
+<div class="chat">
+  <a class="back-btn" href="/matches">Back</a>
+  <main class="chat__content-container">
+    <ul class="chat__messages">
+      <%= user._id %>
+      <% chat.messages.forEach((message) => { %>
+        <%= message.userId %>
+        
+      <li class="message <% if (message.userId == user._id) { %> message--mine <% } %>">
+          <% if (message.type == "giphy") { %>
+            <img class="message__giphy" src="<%= message.content %>">
+          <% } else if (message.type == "text") { %>
+            <p class="message__text"><%= message.content %></p>
+          <% } %>
+          <footer class="message__date">
+            <small><%= message.date %></small>
+          </footer>
+        </li>
+      <% }) %>
+    </ul>
+  </main>
 
-<ul>
-  <% chat.messages.forEach((message) => { %>
-    <li>
-      <% if (message.type == "giphy") { %>
-        <img src="<%= message.content %>">
-      <% } else if (message.type == "text") { %>
-        <p><%= message.content %></p>
-      <% } %>
-      <footer>
-        <small><%= message.date %></small>
-      </footer>
-    </li>
-  <% }) %>
-</ul>
+  <noscript>
+    <a class="chat-footer__giphy-overview-link" href="/chat/<%= chat._id %>/giphy">GIPHY</a>
+  </noscript>
 
-<a class="chat-footer__giphy-overview-link" href="/chat/<%= chat._id %>/giphy">GIPHY</a>
 
-<form action="/chat/<%= chat._id %>/message" method="POST">
-  <input type="hidden" name="type" value="text"> <!-- Could be type GIPHY-->
-  <input type="text" name="content">
-  <button type="submit">Send</button>
-</form>
+  <footer class="chat-footer">
+    <form class="chat__form" action="/chat/<%= chat._id %>/message" method="POST">
+    <section class="chat-footer__giphies-container">
+      <div class="giphy-section__giphies"></div>
+    </section>
+    <div class="chat-footer__controls">
+      <button type="button" class="chat-footer__controls-giphy"><i class="fa fa-file-photo-o"></i></button>
+      <input id="message-type" type="hidden" name="type" value="text">
+      <input id="message-content" type="hidden" name="" value="">
+      <input class="chat-footer__controls-text" type="text" name="content">
+      <button class="send__input"><i class="fa fa-paper-plane"></i></button>
+    </div>
+    </form>
+  </footer>
+</div>

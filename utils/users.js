@@ -1,9 +1,10 @@
+const path = require("path")
 const mongoose = require("mongoose")
 
 const User = require("../models/User")
 const Chat = require("../models/Chat")
 
-const { definedOnSchema } = require("../helpers")
+const { definedOnSchema, deleteUserImage } = require("../helpers")
 
 function _getMatches(id) {
   return new Promise((resolve, reject) => {
@@ -158,13 +159,19 @@ function doesNotExistInUser(query, errorMsg) {
 }
 
 // Removes a user and all the other documents/data where the id pops up
-function deleteUser(id) {
+function deleteUser(id, image_src) {
   return new Promise((resolve, reject) => {
     void (async function () {
       try {
         const matches = await _getMatches(id)
 
+        // // Remove image file
+        await deleteUserImage(
+          path.resolve(__dirname, `../uploads/${image_src}`)
+        )
+
         await Chat.deleteMany({ matchId: { $in: matches } })
+
         // Delete matches in other users where user._id == id
         await User.updateMany(
           { "matches._id": { $in: matches }, _id: { $ne: id } },

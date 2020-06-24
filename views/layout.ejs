@@ -4,53 +4,67 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dating App</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   </head>
   
-  <body>
+  <body class="<%= bodyStyling.backgroundClass %>">
     <% if (isNew) { %>
-      <form action="/user/<%= user._id %>/profile/setup?_method=PUT" method="POST">
-        <% if (messages.error) { %> 
-          <%= locals.messages.error %> 
-        <% } %>
-        <div>
-          <label for="age">Age</label>
-          <input type="number" name="age" id="age" required />
+      <div class="page-container index">
+        <div class="index-form__container">
+          <form class="index-form form" action="/user/<%= user._id %>/profile/setup?_method=PUT" method="POST" enctype="multipart/form-data">
+            <% if (messages.error) { %> 
+              <%= locals.messages.error %> 
+            <% } %>
+            
+            <div class="form__field">
+              <label for="file">Profile image</label>
+              <input id="file" type="file" name="profile_image" />
+            </div>
+
+            <div class="form__field">
+              <label for="age">Age</label>
+              <input type="number" name="age" id="age" required />
+            </div>
+        
+            <div class="form__field">
+              <label for="gender">Gender</label>
+              <select name="gender" id="gender">
+                <option value="" selected hidden disabled>...</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+              </select>
+            </div>
+        
+            <div class="form__field">
+              <label for="sexuality">Sexuality</label>
+              <select name="sexuality" id="sexuality">
+                <option value="" selected hidden disabled>...</option>
+                <option value="heterosexual">Straight</option>
+                <option value="homosexual">Gay</option>
+                <option value="bisexual">Bi</option>
+              </select>
+            </div>
+        
+            <button class="form__submit" type="submit">Done</button>
+          </form> 
         </div>
-    
-        <div>
-          <label for="gender">Gender</label>
-          <select name="gender" id="gender">
-            <option value="" selected hidden disabled>...</option>
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-          </select>
-        </div>
-    
-        <div>
-          <label for="sexuality">Sexuality</label>
-          <select name="sexuality" id="sexuality">
-            <option value="" selected hidden disabled>...</option>
-            <option value="heterosexual">Straight</option>
-            <option value="homosexual">Gay</option>
-            <option value="bisexual">Bi</option>
-          </select>
-        </div>
-    
-        <button type="submit">Done</button>
-      </form>
-    <% } else { %>
-      <div class="page-container">
-        <%- body %>
       </div>
-      <footer>
-        <nav>
-          <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/matches">Matches</a></li>
-            <li><a href="/user/<%= user._id %>">Account</a></li>
-          </ul>
-        </nav>
-      </footer>
+    <% } else { %>
+      <div class="page-flex-container">
+        <div class="page-container">
+          <%- body %>
+        </div>
+        <footer class="footer-nav">
+          <nav>
+            <ul class="footer-nav__list">
+              <li class="footer-nav__list-item"><a href="/">Home</a></li>
+              <li class="footer-nav__list-item"><a href="/matches">Matches</a></li>
+              <li class="footer-nav__list-item"><a href="/user/<%= user._id %>">Account</a></li>
+            </ul>
+          </nav>
+        </footer>
+      </div>
     <% } %>
     <% if ("enabled" in development && development.enabled) { %>
     <script>
