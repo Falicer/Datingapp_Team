@@ -87,6 +87,7 @@ function getPotentialMatches(user) {
         const users = await User.find({
           _id: { $ne: user._id },
           likesReceived: { $nin: [user._id] },
+          dislikesReceived: { $nin: [user._id] },
           gender: getMatchingGender(user.sexuality, user.gender),
           sexuality: user.sexuality,
         })

@@ -10,6 +10,7 @@ const {
   updateUser,
   deleteUser,
   likeUser,
+  dislikeUser,
   createMatch,
   checkIfMatch,
 } = require("../utils")
@@ -54,7 +55,7 @@ router.put("/:id/update", userIdInSession, async (req, res) => {
   }
 })
 
-// Route (POST) : /user/:id/liked?userId=:otherUserId
+// Route (POST) : /user/:id/like?userId=:otherUserId
 router.post("/:id/like", userIdInSession, async (req, res) => {
   const userIds = [req.params.id, req.query.userId]
 
@@ -73,6 +74,19 @@ router.post("/:id/like", userIdInSession, async (req, res) => {
   }
 })
 
+// Route (POST) : /user/:id/dislike?userId=:otherUserId
+router.post("/:id/dislike", userIdInSession, async (req, res) => {
+  const userIds = [req.params.id, req.query.userId]
+
+  try {
+    await Promise.all([verifyUsers(userIds), dislikeUser(...userIds)])
+
+    res.status(200).redirect("/")
+  } catch (error) {
+    res.status(400).send(`${error}\n`)
+  }
+})
+
 function customUpload(req, res, next) {
   upload.single("profile_image")(req, res, (err) => {
     if (err instanceof multer.MulterError) {
@@ -81,6 +95,10 @@ function customUpload(req, res, next) {
     } else if (err instanceof Error) {
       req.flash("error", err.message)
       return res.redirect("/")
+    }
+
+    if (!req.file) {
+      req.flash("error", "You must have a profile image")
     }
 
     res.locals.image_src = req.file.filename

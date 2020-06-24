@@ -6,8 +6,12 @@
           <div class="user-card__image-container">
             <img src="/<%= otherUser.image_src %>" alt="">
           </div>
-
+          
           <div class="flex-container--column">
+            <form class="user-card__controls" action="/user/<%= user._id %>/dislike?userId=<%= otherUser._id %>" method="POST">
+              <button class="dislike-button" type="submit"><i class="fa fa-heart"></i></button>
+            </form>
+
             <form class="user-card__controls" action="/user/<%= user._id %>/like?userId=<%= otherUser._id %>" method="POST">
               <button class="like-button" type="submit"><i class="fa fa-heart"></i></button>
             </form>

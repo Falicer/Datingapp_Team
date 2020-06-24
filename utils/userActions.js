@@ -11,6 +11,15 @@ const alreadyLiked = (currentUserId, likedUserId) =>
     "Already liked this user"
   )
 
+const alreadyDisliked = (currentUserId, dislikedUserId) =>
+  doesNotExistInUser(
+    {
+      _id: dislikedUserId,
+      dislikesReceived: { $in: currentUserId },
+    },
+    "Already liked this user"
+  )
+
 function likeUser(currentUserId, likedUserId) {
   return new Promise((resolve, reject) => {
     void (async function () {
@@ -33,6 +42,29 @@ function likeUser(currentUserId, likedUserId) {
   })
 }
 
+function dislikeUser(currentUserId, dislikedUserId) {
+  return new Promise((resolve, reject) => {
+    void (async function () {
+      try {
+        await alreadyDisliked(currentUserId, dislikedUserId)
+      } catch (error) {
+        return reject(error)
+      }
+
+      try {
+        await User.findByIdAndUpdate(dislikedUserId, {
+          $push: { dislikesReceived: currentUserId },
+        })
+
+        resolve()
+      } catch (error) {
+        reject(error)
+      }
+    })()
+  })
+}
+
 module.exports = {
   likeUser,
+  dislikeUser,
 }

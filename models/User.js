@@ -30,6 +30,7 @@ const UserSchema = new Schema({
   gender: String,
   sexuality: String,
   likesReceived: [{ type: Types.ObjectId, ref: "user" }], // Collect likes received (store other user ids)
+  dislikesReceived: [{ type: Types.ObjectId, ref: "user" }], // Collect likes received (store other user ids)
   matches: [MatchSchema],
 })
 
