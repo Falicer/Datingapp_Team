@@ -1,5 +1,5 @@
-import "../scss/main.scss"
-import giphy from "../../utils/giphy"
+//import "../scss/main.scss"
+//import giphy from "../../utils/giphy"
 
 const giphySection = document.querySelector(".chat-footer__giphies-container")
 let giphySectionToggle,
