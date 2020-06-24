@@ -1,8 +1,9 @@
+const path = require("path")
 const multer = require("multer")
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "uploads/")
+    cb(null, path.resolve(__dirname, "uploads"))
   },
   filename: function (req, file, cb) {
     cb(null, `${req.user._id}.${file.originalname.split(".").pop()}`)

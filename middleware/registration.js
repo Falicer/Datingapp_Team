@@ -5,7 +5,7 @@ const { getUserByEmail } = require("../utils/users")
 async function validateInputs(req, res, next) {
   const { email, name, password, password2 } = req.body
 
-  const nameRegEx = new RegExp(/^[a-z]*?$/, "im")
+  const nameRegEx = new RegExp(/^[a-z]+(?:\s[a-z]+){0,3}$/, "im")
   const passwordRegEx = new RegExp(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/) // Source: https://stackoverflow.com/questions/19605150/regex-for-password-must-contain-at-least-eight-characters-at-least-one-number-a
 
   const errors = []
