@@ -1,3 +1,5 @@
+![App](https://github.com/Falicer/Datingapp_Team/blob/master/assets/images/homepage.gif)
+
 # Datingapp_Team
 
 This project was created for the course(s): Backend and Project Tech.
